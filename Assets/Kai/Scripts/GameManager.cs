@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour
     {
 		SetupInput();
 		SetupPlayer();
-
 	}
 
 	void SetupInput()

@@ -6,47 +6,129 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+	// Designer Variables
 	[SerializeField] private float m_movementSpeed;
 	[SerializeField] private float m_rotationSpeed;
 
-	private Rigidbody2D m_rb;
+	// Vectors
 	private Vector2 m_movementInput;
+	private Vector2 m_mousePosition;
 
+	// Components
+	private Rigidbody2D m_rb;
+	private PlayerInput m_playerInputComponent;
+
+	// Movement Coroutine
+	private Coroutine c_MoveCoroutine;
+	private bool c_IsMoving = false;
+
+	// Rotation Coroutine
+	private Coroutine c_RotateCoroutine;
+	private bool c_isRotating = false;
+
+
+	// Init & Event Bindings
 
 	public void Init(PlayerInput playerInputComponent)
     {
-        m_rb = GetComponent<Rigidbody2D>();
-		playerInputComponent.actions.FindAction("Movement").performed += OnMovement;
+		m_playerInputComponent = playerInputComponent;
+		m_rb = GetComponent<Rigidbody2D>();
+
+		m_playerInputComponent.actions.FindAction("Movement").performed += OnBeginMove;
+		m_playerInputComponent.actions.FindAction("Movement").canceled += OnEndMove;
+
+		m_playerInputComponent.actions.FindAction("Mouse").performed += OnBeginRotate;
+		m_playerInputComponent.actions.FindAction("Mouse").canceled += OnEndRotate;
 	}
 
+	private void OnDestroy()
+	{
+		m_playerInputComponent.actions.FindAction("Movement").performed -= OnBeginMove;
+		m_playerInputComponent.actions.FindAction("Movement").canceled -= OnEndMove;
 
-    void FixedUpdate()
-    {
-		if(m_rb.velocity.magnitude < m_movementSpeed)
-		{
-			m_rb.AddForce(m_movementInput * m_movementSpeed);
-		}
-
-		transform.rotation = Quaternion.Euler(0, 0, CalculateDirection());
+		m_playerInputComponent.actions.FindAction("Mouse").performed -= OnBeginRotate;
+		m_playerInputComponent.actions.FindAction("Mouse").canceled -= OnEndRotate;
 	}
 
-	public void OnMovement(InputAction.CallbackContext ctx)
+	// Player Movement
+
+	void OnBeginMove(InputAction.CallbackContext ctx)
 	{
 		m_movementInput = ctx.ReadValue<Vector2>();
-	}
+		c_IsMoving = true;
 
-	float CalculateDirection()
+		if (c_MoveCoroutine == null)
+		{
+			c_MoveCoroutine = StartCoroutine(CMove());
+		}
+	}
+	void OnEndMove(InputAction.CallbackContext ctx)
 	{
-		Vector2 mousePosition = Mouse.current.position.ReadValue();
+		m_movementInput = ctx.ReadValue<Vector2>();
+		c_IsMoving = false;
 
-		Vector2 mousePositionWorld = new Vector2(Camera.main.ScreenToWorldPoint(mousePosition).x, Camera.main.ScreenToWorldPoint(mousePosition).y);
-
-		float angleRad = Mathf.Atan2(mousePositionWorld.x - transform.position.x, mousePositionWorld.y - transform.position.y);
-
-		float angleDeg = (180 / Mathf.PI) * angleRad;
-
-		return -angleDeg;
+		if (c_MoveCoroutine != null)
+		{
+			StopCoroutine(c_MoveCoroutine);
+			c_MoveCoroutine = null;
+		}
 	}
 
+	IEnumerator CMove()
+	{
+		while (c_IsMoving) 
+		{
 
+			if (m_rb.velocity.magnitude < m_movementSpeed)
+			{
+				m_rb.AddForce(m_movementInput * m_movementSpeed);
+			}
+
+			yield return new WaitForFixedUpdate();
+		}
+
+		yield return null;
+	}
+
+	// Player Rotation
+
+	void OnBeginRotate(InputAction.CallbackContext ctx)
+	{
+		m_mousePosition = ctx.ReadValue<Vector2>();
+		c_isRotating = true;
+
+		if (c_RotateCoroutine == null)
+		{
+			c_RotateCoroutine = StartCoroutine(CRotate());
+		}
+	}
+	void OnEndRotate(InputAction.CallbackContext ctx)
+	{
+		m_mousePosition = ctx.ReadValue<Vector2>();
+		c_isRotating = false;
+
+		if (c_RotateCoroutine != null)
+		{
+			StopCoroutine(c_RotateCoroutine);
+			c_RotateCoroutine = null;
+		}
+	}
+
+	IEnumerator CRotate()
+	{
+		while (c_isRotating)
+		{
+			Vector2 mousePositionWorld = new Vector2(Camera.main.ScreenToWorldPoint(m_mousePosition).x, Camera.main.ScreenToWorldPoint(m_mousePosition).y);
+
+			float angleRad = Mathf.Atan2(mousePositionWorld.x - transform.position.x, mousePositionWorld.y - transform.position.y);
+
+			float angleDeg = (180 / Mathf.PI) * angleRad;
+
+			transform.rotation = Quaternion.Euler(0, 0, -angleDeg);
+
+			yield return new WaitForFixedUpdate();
+		}
+
+		yield return null;
+	}
 }
