@@ -43,6 +43,8 @@ public class PlayerMovement : MonoBehaviour
 
 	private void OnDestroy()
 	{
+		if (m_playerInputComponent == null) return;
+
 		m_playerInputComponent.actions.FindAction("Movement").performed -= OnBeginMove;
 		m_playerInputComponent.actions.FindAction("Movement").canceled -= OnEndMove;
 
