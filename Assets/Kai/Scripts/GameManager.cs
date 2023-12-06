@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
 		m_player = Instantiate(prefabPlayer, new Vector3(m_playerSpawnPosition.x, m_playerSpawnPosition.y, 0f), Quaternion.identity);
 		m_camera = Instantiate(prefabCamera, new Vector3(m_playerSpawnPosition.x, m_playerSpawnPosition.y, -10f), Quaternion.identity);
 
+		Debug.Log(m_playerSpawnPosition);
+
 		// Grab Components
 		m_movementComponent = m_player.GetComponent<PlayerMovement>();
 		m_actionComponent = m_player.GetComponent<PlayerActions>();
