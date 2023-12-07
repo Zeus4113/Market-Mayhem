@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class LoadLevel : MonoBehaviour
 {
     public void LoadNewLevel(string levelName)
@@ -13,5 +14,11 @@ public class LoadLevel : MonoBehaviour
     public void LoadLevelAsync(string levelName)
     {
         SceneManager.LoadSceneAsync(levelName);
+    }
+
+    public void QuitGame ()
+    {
+        Debug.Log("QUIT");
+        Application.Quit();
     }
 }
