@@ -146,10 +146,7 @@ public class PlayerActions : MonoBehaviour
 
 	void OnAttack(InputAction.CallbackContext ctx)
 	{
-		Debug.Log("Attacking...");
-
 		if(canAttack) StartCoroutine(Attack());
-
 	}
 
 	IEnumerator Attack()
@@ -159,11 +156,7 @@ public class PlayerActions : MonoBehaviour
 
 		canAttack = false;
 
-		Debug.Log(canAttack);
-
 		yield return new WaitForSeconds(m_attackCooldown);
-
-		Debug.Log(canAttack);
 
 		canAttack = true;
 

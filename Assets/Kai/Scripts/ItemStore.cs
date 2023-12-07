@@ -22,7 +22,7 @@ public class ItemStore : MonoBehaviour
 
 		for(int i = 0;  i < m_itemSpawnTransforms.Length; i++)
 		{
-			m_items.Add(Instantiate(m_itemPrefab, m_itemSpawnTransforms[i].position, m_itemSpawnTransforms[i].rotation));
+			m_items.Add(Instantiate(m_itemPrefab, m_itemSpawnTransforms[i].position, Quaternion.Euler(0, 0, Random.Range(0, 360))));
 		}
 	}
 

@@ -7,19 +7,18 @@ public enum EnemyStates
 {
 	Searching,
 	Fleeing,
+	Stunned,
 }
 
 public class EnemyController : MonoBehaviour
 {
-	[SerializeField] float m_movementSpeed;
+	[SerializeField] float m_movementSpeed = 4f;
+	[SerializeField] float m_stunTime = 1f;
 
 	private EnemyManager m_manager;
 
-	private Transform m_moveToTransform;
-	private Transform m_currentTransform;
-
-	[SerializeField] private Transform m_targetBreakable;
-	[SerializeField] private Transform m_targetDoor;
+	private Transform m_targetBreakable;
+	private Transform m_targetDoor;
 
 	private GameObject m_pickedItem;
 
@@ -84,12 +83,34 @@ public class EnemyController : MonoBehaviour
 					else
 					{
 						m_targetBreakable = m_manager.GetNewBreakable();
+
+						if(m_targetBreakable == null)
+						{
+							m_manager.RemoveEnemy(this);
+						}
 					}
 
 					break;
 
 				case EnemyStates.Fleeing:
+
 					Move(m_targetDoor);
+
+					break;
+
+				case EnemyStates.Stunned:
+
+					yield return new WaitForSeconds(m_stunTime);
+					
+					if(m_pickedItem != null)
+					{
+						SetEnemyState(EnemyStates.Fleeing);
+					}
+					else if(m_pickedItem == null)
+					{
+						SetEnemyState(EnemyStates.Searching);
+					}
+
 					break;
 			}
 
@@ -100,19 +121,18 @@ public class EnemyController : MonoBehaviour
 	public void SetEnemyState(EnemyStates state)
 	{
 		m_currentState = state;
-		Debug.Log(m_currentState);
 	}
 
 	private void Move(Transform target)
 	{
 		Vector2 pos = Vector2.MoveTowards(transform.position, target.position, m_movementSpeed * Time.fixedDeltaTime);
+		Vector2 direction = (target.position - transform.position).normalized;
 		m_rigidbody.MovePosition(pos);
-		//transform.LookAt(m_targetBreakable);
+		transform.up = direction;
 	}
 
 	public void AddItem(GameObject item)
 	{
-		m_pickedItem = new GameObject();
 		m_pickedItem = item;
 		m_pickedItem.transform.parent = transform;
 		m_pickedItem.transform.position = transform.position;
@@ -122,7 +142,7 @@ public class EnemyController : MonoBehaviour
 	public void RemoveItem()
 	{
 		Destroy(m_pickedItem);
-		if(m_pickedItem != null) m_pickedItem = null;
+
 		SetEnemyState(EnemyStates.Searching);
 	}
 
