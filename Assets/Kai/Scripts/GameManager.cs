@@ -16,10 +16,7 @@ public class GameManager : MonoBehaviour
 	private GameObject m_inputManager;
 	private GameObject m_camera;
 
-	private PlayerMovement m_movementComponent;
-	private PlayerActions m_actionComponent;
-
-	private InputManager m_inputManagerComponent;
+	private PlayerController m_playerController;
 	private PlayerInput m_playerInputComponent;
 	private CameraSetter m_cameraSetterComponent;
 
@@ -47,14 +44,12 @@ public class GameManager : MonoBehaviour
 		Debug.Log(m_playerSpawnPosition);
 
 		// Grab Components
-		m_movementComponent = m_player.GetComponent<PlayerMovement>();
-		m_actionComponent = m_player.GetComponent<PlayerActions>();
+		m_playerController = m_player.GetComponent<PlayerController>();
 		m_cameraSetterComponent = m_camera.GetComponent<CameraSetter>();
 
 		// Initialize Components
+		m_playerController.Init(m_playerInputComponent);
 		m_cameraSetterComponent.Init(m_player, m_cameraZOffset);
-		m_movementComponent.Init(m_playerInputComponent);
-		m_actionComponent.Init(m_playerInputComponent);
 	}
 
 }

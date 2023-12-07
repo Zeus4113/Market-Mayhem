@@ -7,52 +7,97 @@ using UnityEngine.InputSystem;
 
 public class PlayerActions : MonoBehaviour
 {
-	[SerializeField] private GameObject m_playerHandPrefab;
 	[SerializeField] private float m_punchForce;
+	[SerializeField] private float m_attackCooldown;
 
-	private GameObject m_playerHand;
+	private PlayerController m_playerController;
 	private Rigidbody2D m_handRB;
 	private Transform m_handHomeTransform;
 
 	private Coroutine C_Lerping;
 	private bool C_IsLerping = false;
 
+	private Coroutine C_Checking;
+	private bool C_IsChecking = false;
+
+	private bool canAttack = true;
+
 	private void Awake()
 	{
-		m_handHomeTransform = this.transform.GetChild(0).transform;
-		Debug.Log(m_handHomeTransform.position);
-
-		m_playerHand = Instantiate(m_playerHandPrefab, transform.position + m_handHomeTransform.position, m_handHomeTransform.rotation);
-
-		m_handRB = m_playerHand.GetComponent<Rigidbody2D>();
+		m_handRB = this.GetComponent<Rigidbody2D>();
 	}
 
-	public void Init(PlayerInput inputComponent)
+	public void Init(PlayerInput inputComponent, Transform homeLocation, PlayerController characterController, string handSide)
 	{
-		inputComponent.actions.FindAction("Throw").performed += OnThrow;
-		inputComponent.actions.FindAction("Attack").performed += OnAttack;
-	}
-
-	private void Update()
-	{
-		
-
-		if (Vector2.Distance(m_playerHand.transform.position, m_handHomeTransform.position) > 0.01f)
+		if(handSide.ToLower() == "left")
 		{
-			if(m_handRB.velocity.magnitude < 1f)
+			inputComponent.actions.FindAction("Attack Left").performed += OnAttack;
+		}
+		else if(handSide.ToLower() == "right")
+		{
+			inputComponent.actions.FindAction("Attack Right").performed += OnAttack;
+		}
+		else
+		{
+			Debug.Log("Error: Hand Side Not Selected!");
+		}
+
+		m_handHomeTransform = homeLocation;
+		m_playerController = characterController;
+
+		StartCheckCoroutine();
+
+	}
+
+	private void StartCheckCoroutine()
+	{
+		if (C_IsChecking) return;
+
+		C_IsChecking = true;
+
+		if (C_Checking == null)
+		{
+			C_Checking = StartCoroutine(CheckHandPosition());
+		}
+	}
+
+	private void StopCheckCoroutine()
+	{
+		if (C_IsChecking)
+		{
+			C_IsChecking = false;
+
+			if (C_Checking != null)
 			{
-				StartLerpCoroutine(m_handHomeTransform.position, 0.2f);
+				StopCoroutine(C_Checking);
+				C_Checking = null;
 			}
 		}
+	}
 
-		if (Vector2.Distance(m_playerHand.transform.position, m_handHomeTransform.position) < 0.01f)
+	private IEnumerator CheckHandPosition()
+	{
+		while (true)
 		{
-			StopLerpCoroutine();
-		}
+			if (Vector2.Distance(this.transform.position, m_handHomeTransform.position) > 0.01f)
+			{
+				if (m_handRB.velocity.magnitude < 1f)
+				{
+					StartLerpCoroutine(m_handHomeTransform.position, 0.05f);
+				}
+			}
 
-		if(Vector2.Distance(m_playerHand.transform.position, m_handHomeTransform.position) < 0.5f)
-		{
-			m_playerHand.transform.rotation = transform.rotation;
+			if (Vector2.Distance(this.transform.position, m_handHomeTransform.position) < 0.01f)
+			{
+				StopLerpCoroutine();
+			}
+
+			if (Vector2.Distance(this.transform.position, m_handHomeTransform.position) < 0.5f)
+			{
+				this.transform.rotation = m_playerController.transform.rotation;
+			}
+
+			yield return new WaitForFixedUpdate();
 		}
 	}
 
@@ -85,12 +130,12 @@ public class PlayerActions : MonoBehaviour
 	private IEnumerator LerpPosition(Vector2 targetLocation, float duration)
 	{
 		float time = 0;
-		Vector2 startPosition = m_playerHand.transform.position;
+		Vector2 startPosition = this.transform.position;
 
 		while (time < duration)
 		{
 
-			m_playerHand.transform.position = Vector2.Lerp(startPosition, targetLocation, time / duration);
+			this.transform.position = Vector2.Lerp(startPosition, targetLocation, time / duration);
 			time += Time.deltaTime;
 
 			yield return new WaitForFixedUpdate();
@@ -99,22 +144,28 @@ public class PlayerActions : MonoBehaviour
 		StopLerpCoroutine();
 	}
 
-
-	void OnThrow(InputAction.CallbackContext ctx)
-	{
-		Debug.Log("Thowing...");
-	}
-
 	void OnAttack(InputAction.CallbackContext ctx)
 	{
 		Debug.Log("Attacking...");
 
-		m_handRB.velocity = new Vector2(0,0);
-		m_handRB.AddForce(transform.up * m_punchForce, ForceMode2D.Impulse);
+		if(canAttack) StartCoroutine(Attack());
+
 	}
 
-	IEnumerator AttackCooldown()
+	IEnumerator Attack()
 	{
-		yield return null;
+		m_handRB.velocity = new Vector2(0, 0);
+		m_handRB.AddForce(transform.up * m_punchForce, ForceMode2D.Impulse);
+
+		canAttack = false;
+
+		Debug.Log(canAttack);
+
+		yield return new WaitForSeconds(m_attackCooldown);
+
+		Debug.Log(canAttack);
+
+		canAttack = true;
+
 	}
 }
