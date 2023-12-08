@@ -16,7 +16,10 @@ public class PlayerController : MonoBehaviour
 	private Transform m_leftHandPosition;
 	private Transform m_rightHandPosition;
 
-	public void Init(PlayerInput playerInputComponent)
+    private Transform m_leftSwingPosition;
+    private Transform m_rightSwingPosition;
+
+    public void Init(PlayerInput playerInputComponent)
 	{
 		m_playerInputComponent = playerInputComponent;
 		m_movement = GetComponent<PlayerMovement>();
@@ -25,15 +28,19 @@ public class PlayerController : MonoBehaviour
 		m_leftHandPosition = handHolders.GetChild(1);
 		m_rightHandPosition = handHolders.GetChild(0);
 
-		SetupHands();
+        Transform swingPositions = this.transform.Find("Swing Positions");
+        m_leftSwingPosition = swingPositions.GetChild(1);
+        m_rightSwingPosition = swingPositions.GetChild(0);
+
+        SetupHands();
 		InitialisePlayerComponents();
 	}
 
 	private void InitialisePlayerComponents()
 	{
 		m_movement.Init(m_playerInputComponent);
-		m_leftHand.Init(m_playerInputComponent, m_leftHandPosition, this, "left");
-		m_rightHand.Init(m_playerInputComponent, m_rightHandPosition, this, "right");
+		m_leftHand.Init(m_playerInputComponent, m_leftHandPosition, m_leftSwingPosition, this, "left");
+		m_rightHand.Init(m_playerInputComponent, m_rightHandPosition, m_rightSwingPosition, this, "right");
 	}
 
 	private void SetupHands()

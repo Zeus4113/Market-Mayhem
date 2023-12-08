@@ -13,8 +13,13 @@ public class PlayerActions : MonoBehaviour
 	private PlayerController m_playerController;
 	private Rigidbody2D m_handRB;
 	private Transform m_handHomeTransform;
+	private Transform m_savedHandHomeTransform;
+	private Transform m_savedSwingTransform;
 
-	private Coroutine C_Lerping;
+	private string m_handSide;
+	private PlayerInput m_playerInput;
+
+    private Coroutine C_Lerping;
 	private bool C_IsLerping = false;
 
 	private Coroutine C_Checking;
@@ -23,32 +28,70 @@ public class PlayerActions : MonoBehaviour
 	private bool canAttack = true;
 
 	private bool IsHolding = false;
+	private GameObject HeldItem;
 
 	private void Awake()
 	{
 		m_handRB = this.GetComponent<Rigidbody2D>();
 	}
 
-	public void Init(PlayerInput inputComponent, Transform homeLocation, PlayerController characterController, string handSide)
+	public void Init(PlayerInput inputComponent, Transform homeLocation, Transform swingPosition, PlayerController characterController, string handSide)
 	{
-		if(handSide.ToLower() == "left")
-		{
-			inputComponent.actions.FindAction("Attack Left").performed += OnAttack;
-		}
-		else if(handSide.ToLower() == "right")
-		{
-			inputComponent.actions.FindAction("Attack Right").performed += OnAttack;
-		}
-		else
-		{
-			Debug.Log("Error: Hand Side Not Selected!");
-		}
-
+        m_handSide = handSide.ToLower();
+		m_playerInput = inputComponent;
 		m_handHomeTransform = homeLocation;
+		m_savedHandHomeTransform = homeLocation;
+		m_savedSwingTransform = swingPosition;
 		m_playerController = characterController;
 
+		BindEvents(true);
 		StartCheckCoroutine();
+	}
 
+	public PlayerInput GetPlayerInputComponent()
+	{
+		return m_playerInput;
+	}
+
+	public string GetHandSide()
+	{
+		return m_handSide;
+	}
+
+	public void BindEvents(bool isTrue)
+	{
+		switch (isTrue)
+		{
+			case true:
+                if (m_handSide.ToLower() == "left")
+                {
+                    m_playerInput.actions.FindAction("Attack Left").performed += OnAttack;
+                }
+                else if (m_handSide.ToLower() == "right")
+                {
+                    m_playerInput.actions.FindAction("Attack Right").performed += OnAttack;
+                }
+                else
+                {
+                    Debug.Log("Error: Hand Side Not Selected!");
+                }
+                break;
+
+			case false:
+                if (m_handSide.ToLower() == "left")
+                {
+                    m_playerInput.actions.FindAction("Attack Left").performed -= OnAttack;
+                }
+                else if (m_handSide.ToLower() == "right")
+                {
+                    m_playerInput.actions.FindAction("Attack Right").performed -= OnAttack;
+                }
+                else
+                {
+                    Debug.Log("Error: Hand Side Not Selected!");
+                }
+                break;
+		}
 	}
 
 	private void StartCheckCoroutine()
@@ -112,7 +155,8 @@ public class PlayerActions : MonoBehaviour
 		if (C_Lerping == null)
 		{
 			C_Lerping = StartCoroutine(LerpPosition(targetLocation, duration));
-		}
+            m_handRB.angularDrag = 0.05f;
+        }
 	}
 
 	private void StopLerpCoroutine()
@@ -153,20 +197,42 @@ public class PlayerActions : MonoBehaviour
 
 	IEnumerator Attack()
 	{
-		m_handRB.velocity = new Vector2(0, 0);
-		m_handRB.AddForce(transform.up * m_punchForce, ForceMode2D.Impulse);
+        m_handRB.velocity = new Vector2(0, 0);
+        m_handRB.angularVelocity = 0;
+        switch (IsHolding)
+		{
+			case true:       
+                this.transform.position = m_savedSwingTransform.position;
+                m_handRB.angularDrag = 15;
+				switch (m_handSide.ToLower())
+				{
+					case "left":
+                        m_handRB.AddForce((transform.up + transform.right) * m_punchForce, ForceMode2D.Impulse);
+                        m_handRB.AddTorque(-2500f);
+                        break;
+					case "right":
+                        m_handRB.AddForce((transform.up - transform.right) * m_punchForce, ForceMode2D.Impulse);
+                        m_handRB.AddTorque(2500f);
+                        break;
+				}            
+				HeldItem.GetComponent<Throwable>().EditDurability(-1);
+                break;
 
-		canAttack = false;
+			case false:
+                m_handRB.AddForce(transform.up * m_punchForce, ForceMode2D.Impulse);
+				break;
+        }
+        canAttack = false;
 
-		yield return new WaitForSeconds(m_attackCooldown);
+        yield return new WaitForSeconds(m_attackCooldown);
 
-		canAttack = true;
+        canAttack = true;
+    }
 
-	}
-
-	public void SetHolding(bool HoldingBool)
+	public void SetHolding(bool HoldingBool, GameObject Item)
 	{
 		IsHolding = HoldingBool;
+		HeldItem = Item;
 	}
 
 	public bool GetHolding()
