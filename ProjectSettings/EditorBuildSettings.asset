@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Sebastian/Menu.unity
+    path: Assets/Sebastian/Scenes/MainMenu.unity
     guid: bb80fb50e04a0544693cc358053ea884
   - enabled: 1
     path: Assets/Kai/Scenes/TestScene.unity
