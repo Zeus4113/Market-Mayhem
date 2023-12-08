@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Breakable : MonoBehaviour, IDamageable
+public class Breakable : MonoBehaviour
 {
 	[SerializeField] private const float maxHealth = 100f;
 	[SerializeField] private Sprite[] breakableSprites = new Sprite[3];

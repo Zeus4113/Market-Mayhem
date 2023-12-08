@@ -54,7 +54,7 @@ public class EnemyManager : MonoBehaviour
 				GameObject newEnemy = Instantiate(m_enemyPrefab, m_spawnLocations[index].position, m_spawnLocations[index].rotation);
 				EnemyController controller = newEnemy.GetComponent<EnemyController>();
 
-				m_enemyList.Add(controller);
+				AddEnemy(controller);
 				controller.Init(m_breakableLocations[Random.Range(0, m_breakableLocations.Length)], m_spawnLocations[index], this);
 
 				yield return new WaitForSeconds(0.1f);
@@ -66,7 +66,8 @@ public class EnemyManager : MonoBehaviour
 
 	public Transform GetNewBreakable()
 	{
-		while (true)
+		bool isRunning = true;
+		while (isRunning)
 		{
 			Transform newLocation = m_breakableLocations[Random.Range(0, m_breakableLocations.Length)];
 
@@ -74,6 +75,39 @@ public class EnemyManager : MonoBehaviour
 			{
 				return m_breakableLocations[Random.Range(0, m_breakableLocations.Length)];
 			}
+
+			int count = 0;
+
+			for (int i = 0; i < m_breakableLocations.Length; i++)
+			{
+				Debug.Log(count);
+
+				if (!m_breakableLocations[i].GetComponent<ItemStore>().CheckRemainingItems())
+				{
+					count++;
+				}
+
+				if(count == m_breakableLocations.Length - 1)
+				{
+					isRunning = false;
+				}
+			}
 		}
+
+		return null;
+	}
+
+	public void AddEnemy(EnemyController controller)
+	{
+		m_enemyList.Add(controller);
+	}
+
+	public void RemoveEnemy(EnemyController controller)
+	{
+		m_enemyList.Remove(controller);
+
+		GameObject enemy = controller.gameObject;
+		Destroy(enemy);
+
 	}
 }

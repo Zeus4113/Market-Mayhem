@@ -6,6 +6,6 @@ public interface IDamageable
 {
 	void SetHealth(float health);
 	void Damage(float damage);
-	void IsAlive();
+	bool IsAlive();
 
 }
