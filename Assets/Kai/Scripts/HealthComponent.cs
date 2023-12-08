@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealthComponent : MonoBehaviour, IDamageable
 {
+	[SerializeField] private GameObject m_deadEnemy;
 	[SerializeField] private float m_maxHealth;
 	private float m_currentHealth;
 
@@ -31,6 +32,7 @@ public class HealthComponent : MonoBehaviour, IDamageable
 		if (!IsAlive())
 		{
 			Debug.Log("Dead");
+			Instantiate(m_deadEnemy, transform.position, transform.rotation);
 			Destroy(this.gameObject);
 		}
 	}

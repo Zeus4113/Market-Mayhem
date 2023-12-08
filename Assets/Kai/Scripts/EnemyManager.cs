@@ -5,19 +5,25 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
 	[SerializeField] private Transform[] m_spawnLocations;
-	[SerializeField] private Transform[] m_breakableLocations;
 
 	[SerializeField] private int m_spawnCount;
 	[SerializeField] private GameObject m_enemyPrefab;
+
+	private Transform[] m_breakableLocations;
 
 	List<EnemyController> m_enemyList = new List<EnemyController>();
 
 	Coroutine C_SpawnEnemies;
 	bool C_IsSpawning = false;
 
-	private void Start()
+	public void Init(Transform[] breakableLocations)
 	{
-		StartSpawnEnemies();
+		m_breakableLocations = breakableLocations;
+
+		if(m_breakableLocations.Length > 0)
+		{
+			StartSpawnEnemies();
+		}
 	}
 
 	void StartSpawnEnemies()

@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 564992109013072930}
   - component: {fileID: 7300920101636793073}
   - component: {fileID: 2720527059374774870}
+  - component: {fileID: 2392620563770334900}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -201,6 +202,22 @@ PolygonCollider2D:
       - {x: 0.051996294, y: 0.07}
       - {x: 0.00039277598, y: 0.07369916}
   m_UseDelaunayMesh: 0
+--- !u!114 &2392620563770334900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908480866718295155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &2279140934922899179
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +251,7 @@ Transform:
   - {fileID: 1956472462346230626}
   - {fileID: 1320383785948488854}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4120136083072155474
 MonoBehaviour:
@@ -389,7 +406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1956472462346230626}
   m_Layer: 0
-  m_Name: Item Positons
+  m_Name: Item Positions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

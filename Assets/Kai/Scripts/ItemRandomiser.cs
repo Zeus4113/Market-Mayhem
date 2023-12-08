@@ -7,6 +7,10 @@ public class ItemRandomiser : MonoBehaviour
 
 	[SerializeField] private Sprite[] m_sprites;
 
+	public delegate void OnItemDestroyed();
+
+	public event OnItemDestroyed itemDestroyed;
+
 	private void Start()
 	{
 		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -20,5 +24,10 @@ public class ItemRandomiser : MonoBehaviour
 		mySprite = m_sprites[Random.Range(0, m_sprites.Length -1)];
 
 		return mySprite;
+	}
+
+	public void OnDestroy()
+	{
+		itemDestroyed?.Invoke();
 	}
 }

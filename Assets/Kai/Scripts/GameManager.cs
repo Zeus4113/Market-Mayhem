@@ -5,9 +5,13 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
+	// Prefabs
 	[SerializeField] GameObject prefabPlayer;
 	[SerializeField] GameObject prefabInputManager;
 	[SerializeField] GameObject prefabCamera;
+
+	// References
+	[SerializeField] private GameObject m_scoreManager;
 
 	[SerializeField] Vector2 m_playerSpawnPosition = new Vector2(0,0);
 	[SerializeField] float m_cameraZOffset = -10f;
@@ -24,6 +28,15 @@ public class GameManager : MonoBehaviour
     {
 		SetupInput();
 		SetupPlayer();
+		SetupScoreManager();
+	}
+
+	void SetupScoreManager()
+	{
+		if (m_scoreManager != null)
+		{
+			m_scoreManager.GetComponent<ScoreManager>().Init();
+		}
 	}
 
 	void SetupInput()

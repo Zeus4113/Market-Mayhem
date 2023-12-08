@@ -10,9 +10,9 @@ public class ItemStore : MonoBehaviour
 
 	List<GameObject> m_items = new List<GameObject>();
 
-	private void Start()
+	public void Init()
 	{
-		Transform myTransform = transform.Find("Item Positons");
+		Transform myTransform = transform.Find("Item Positions");
 		m_itemSpawnTransforms = new Transform[myTransform.childCount];
 
 		for (int i = 0; i < myTransform.childCount; i++) 
@@ -47,5 +47,15 @@ public class ItemStore : MonoBehaviour
 	{
 		if (m_items.Count == 0) return false;
 		else return true;
+	}
+
+	public int GetItemCount()
+	{
+		return m_items.Count;
+	}
+	
+	public List<GameObject> GetItems()
+	{
+		return m_items;
 	}
 }
