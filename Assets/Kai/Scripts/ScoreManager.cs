@@ -7,17 +7,16 @@ using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
-	// Temp References
-	[SerializeField] private Transform m_sliderTransform;
-	private Slider m_slider;
-
-	[SerializeField] private NavMeshSurface m_surface;
-	
+	// UI Elements
+	private Slider m_progressBar;
+	private Transform m_gameOverOverlay;
 
 	// Designer Fields
+	[SerializeField] private NavMeshSurface m_surface;
 	[SerializeField] private GameObject m_breakablePrefab;
-	[SerializeField] private Transform[] m_breakablePositions;
 	[SerializeField] private GameObject m_enemyManager;
+	[SerializeField] private UserInterfaceManager m_userInterfaceManager;
+	[SerializeField] private Transform[] m_breakablePositions;
 
 	// Member Variables
 	private int m_numberOfItems;
@@ -31,14 +30,19 @@ public class ScoreManager : MonoBehaviour
 
 	public void Init()
 	{
-		m_slider = m_sliderTransform.GetComponent<Slider>();
+		if(m_userInterfaceManager != null)
+		{
+			Transform myWidget = m_userInterfaceManager.GetWidget("Progress Bar");
+			m_progressBar = myWidget.GetComponentInChildren<Slider>();
+		}
+
 		m_enemyManager.GetComponent<EnemyManager>().Init(SetupBreakables());
 	}
 
 	public void DecrementCurrentItems()
 	{
 		m_numberOfItems--;
-		m_slider.value = CalculateBarPercentage();
+		m_progressBar.value = CalculateBarPercentage();
 	}
 
 	private Transform[] SetupBreakables()
@@ -61,6 +65,7 @@ public class ScoreManager : MonoBehaviour
 		BindItemEvents();
 
 		m_surface.BuildNavMeshAsync();
+		m_userInterfaceManager.EnableGameOverWidget(false);
 
 		m_totalItems = m_numberOfItems;
 		return m_breakableList.ToArray();
@@ -87,7 +92,11 @@ public class ScoreManager : MonoBehaviour
 
 		float barPercentage = 1.0f * m_numberOfItems / m_totalItems;
 
-		Debug.Log(barPercentage);
+		if (barPercentage <= 0f)
+		{
+			m_userInterfaceManager.EnableGameOverWidget(true);
+		}
+
 		return barPercentage;
 	}
 }
