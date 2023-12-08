@@ -5,38 +5,49 @@ using UnityEngine;
 
 public class Throwable : MonoBehaviour
 {
-    private Rigidbody2D m_playerRB;
-    private Rigidbody2D m_RB;
+    private Rigidbody2D m_playerHand;
     bool m_pickedUp = false;
     bool m_canPickUp = true;
     Quaternion m_weaponRot;
-    Vector3 m_throwDirection;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        m_RB = GetComponent<Rigidbody2D>();
-        m_playerRB = collision.GetComponent<Rigidbody2D>();
+        if (collision.GetComponent<Rigidbody2D>() == null || collision.GetComponent<PlayerActions>().GetHolding() || !m_canPickUp || m_pickedUp) return;
+        m_playerHand = collision.GetComponent<Rigidbody2D>();
 
-        if(m_canPickUp) m_pickedUp = true;
+        if (m_canPickUp) m_pickedUp = true;
+        collision.GetComponent<PlayerActions>().SetHolding(true);
     }
-
+ 
     private void LateUpdate()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse1) && m_pickedUp) Throw();
+
         if (m_pickedUp)
         {
-            m_RB.transform.position = m_playerRB.transform.position;
+            this.transform.position = m_playerHand.transform.position;
 
-            m_weaponRot = m_playerRB.transform.rotation;
+            m_weaponRot = m_playerHand.transform.rotation;
             m_weaponRot *= Quaternion.Euler(Vector3.forward * 90);
-            m_RB.transform.rotation = m_weaponRot;
+            this.transform.rotation = m_weaponRot;
         }
+
+
     }
 
     private void Throw()
     {
-        m_throwDirection = m_playerRB.transform.up;
         m_pickedUp = false;
-        m_canPickUp = false;
-        m_RB.AddForce(new Vector2(m_throwDirection.x, m_throwDirection.y) * 10);
+        this.GetComponent<Rigidbody2D>().AddForce(m_playerHand.transform.up * 7, ForceMode2D.Impulse);
+        this.GetComponent<Rigidbody2D>().AddTorque(-20f);
+
+        m_playerHand.GetComponent<PlayerActions>().SetHolding(false);
+        DelayPickup();
+        m_canPickUp = true;
+    }
+
+    private IEnumerator DelayPickup()
+    {
+        yield return new WaitForSeconds(1);
     }
 }

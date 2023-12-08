@@ -22,6 +22,8 @@ public class PlayerActions : MonoBehaviour
 
 	private bool canAttack = true;
 
+	private bool IsHolding = false;
+
 	private void Awake()
 	{
 		m_handRB = this.GetComponent<Rigidbody2D>();
@@ -160,5 +162,15 @@ public class PlayerActions : MonoBehaviour
 
 		canAttack = true;
 
+	}
+
+	public void SetHolding(bool HoldingBool)
+	{
+		IsHolding = HoldingBool;
+	}
+
+	public bool GetHolding()
+	{
+		return IsHolding;
 	}
 }

@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 7941909303960132126}
   - component: {fileID: 5312752185370678518}
   - component: {fileID: 6085304768947682089}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player Left Hand
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
