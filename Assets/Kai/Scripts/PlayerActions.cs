@@ -30,6 +30,8 @@ public class PlayerActions : MonoBehaviour
 	private bool IsHolding = false;
 	private GameObject HeldItem;
 
+	private Sprite m_handSprite;
+
 	private void Awake()
 	{
 		m_handRB = this.GetComponent<Rigidbody2D>();

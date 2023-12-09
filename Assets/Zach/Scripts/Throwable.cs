@@ -6,18 +6,41 @@ using UnityEngine.InputSystem;
 
 public class Throwable : MonoBehaviour
 {
+    [SerializeField] private WeaponScriptableObject weaponData;
+
+
     private Rigidbody2D m_playerHand;
     bool m_pickedUp = false;
     bool m_canPickUp = true;
     Quaternion m_weaponRot;
     PlayerInput m_playerInput;
     string m_handSide;
-    int m_durability = 5;
+    int m_durability;
+    float m_handleOffset;
+    float m_rotationOffset;
 
-    public void Init(PlayerInput playerInputComponent, string HandSide)
+    private SpriteRenderer m_spriteRenderer;
+
+    private void Awake()
+    {
+        m_spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+    public void Init(WeaponScriptableObject myWeaponData)
+    {
+        weaponData = myWeaponData;
+
+        m_spriteRenderer.sprite = weaponData.m_spriteUnequipped;
+        m_handleOffset = weaponData.m_handleOffset;
+        m_rotationOffset = weaponData.m_rotationOffset;
+        m_durability = weaponData.m_durability;
+    }
+
+    public void SetAttached(PlayerInput playerInputComponent, string HandSide)
     {
         m_playerInput = playerInputComponent;
         m_handSide = HandSide.ToLower();
+        m_spriteRenderer.sprite = weaponData.m_spriteEquipped;
+        if (m_durability <= 0) WeaponDestroyed();
     }
 
     private void WeaponDestroyed()
@@ -56,14 +79,19 @@ public class Throwable : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<Rigidbody2D>() == null || collision.GetComponent<PlayerActions>().GetHolding() || !m_canPickUp || m_pickedUp) return;
+        if(collision == null) return;
+
+        if (!collision.GetComponent<Rigidbody2D>()) return;
+
+        if (!collision.GetComponent<PlayerActions>()) return;
+
+        if (collision.GetComponent<PlayerActions>().GetHolding() || !m_canPickUp || m_pickedUp) return;
+
         m_playerHand = collision.GetComponent<Rigidbody2D>();
 
-        //this.transform.parent = m_playerHand.transform;
-        //this.transform.position = m_playerHand.transform.position;
         if (m_canPickUp)
         {
-            Init(m_playerHand.GetComponent<PlayerActions>().GetPlayerInputComponent(), m_playerHand.GetComponent<PlayerActions>().GetHandSide());
+            SetAttached(m_playerHand.GetComponent<PlayerActions>().GetPlayerInputComponent(), m_playerHand.GetComponent<PlayerActions>().GetHandSide());
         }
 
         if (m_canPickUp) m_pickedUp = true;
@@ -77,18 +105,22 @@ public class Throwable : MonoBehaviour
         if (m_pickedUp)
         {
             this.transform.position = m_playerHand.transform.position;
+            m_weaponRot = m_playerHand.transform.rotation;
+
             switch (m_handSide.ToLower())
             {
                 case "left":
-                    this.transform.position += m_playerHand.transform.right * -0.3f;
+                    this.transform.position += m_playerHand.transform.right * -m_handleOffset;
+                    m_weaponRot *= Quaternion.Euler(Vector3.forward * m_rotationOffset);
+
                     break;
                 case "right":
-                    this.transform.position += m_playerHand.transform.right * 0.3f;
+                    this.transform.position += m_playerHand.transform.right * m_handleOffset;
+                    m_weaponRot *= Quaternion.Euler(Vector3.forward * (m_rotationOffset + 180));
+
                     break;
             }
 
-            m_weaponRot = m_playerHand.transform.rotation;
-            m_weaponRot *= Quaternion.Euler(Vector3.forward * 90);
             this.transform.rotation = m_weaponRot;
         }
 
