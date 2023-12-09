@@ -20,7 +20,7 @@ public class CameraSetter : MonoBehaviour
 	{
 		if (m_parentPosition == null || m_offset == 0) return;
 
-		Debug.Log("Firing");
+		//Debug.Log("Firing");
 		transform.position = new Vector3(m_parentPosition.position.x, m_parentPosition.position.y, m_offset);
 
 	}
