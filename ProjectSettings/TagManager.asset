@@ -16,7 +16,7 @@ TagManager:
   - Weapon
   - Player
   - Player Hands
-  - 
+  - UI Particles
   - 
   - 
   - 
@@ -42,4 +42,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI Particles
+    uniqueID: 1110148607
+    locked: 0
+  - name: UI Widgets
+    uniqueID: 582183957
     locked: 0

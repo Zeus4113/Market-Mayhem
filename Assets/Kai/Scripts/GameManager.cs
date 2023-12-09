@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
 	// References
 	[SerializeField] private GameObject m_scoreManager;
+	[SerializeField] private GameObject m_UIManager;
 
 	[SerializeField] Vector2 m_playerSpawnPosition = new Vector2(0,0);
 	[SerializeField] float m_cameraZOffset = -10f;
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
     {
 		SetupInput();
 		SetupPlayer();
+		SetupUIManager();
 		SetupScoreManager();
 	}
 
@@ -36,6 +38,14 @@ public class GameManager : MonoBehaviour
 		if (m_scoreManager != null)
 		{
 			m_scoreManager.GetComponent<ScoreManager>().Init();
+		}
+	}
+
+	void SetupUIManager()
+	{
+		if(m_UIManager != null)
+		{
+			m_UIManager.GetComponent<UserInterfaceManager>().Init(m_camera.GetComponent<Camera>());
 		}
 	}
 

@@ -5,28 +5,25 @@ using UnityEngine.UI;
 
 public class UserInterfaceManager : MonoBehaviour
 {
-
 	private Canvas m_canvas;
-	private Transform m_progressBar;
-	private Transform m_gameOverImage;
-	private Transform m_digitalClock;
-	private Transform m_calendar;
-	private Transform m_peopleCounter;
+	private GameObject m_progressBar;
+	private GameObject m_gameOverImage;
+	private GameObject m_digitalClock;
+	private GameObject m_calendar;
+	private GameObject m_peopleCounter;
 
-	private void Start()
-	{
-		Init();
-	}
-
-	public void Init()
+	public void Init(Camera mainCamera)
 	{
 		m_canvas = GetComponent<Canvas>();
 
-		m_progressBar = transform.Find("Progress Bar");
-		m_gameOverImage = transform.Find("Game Over Overlay");
-		m_peopleCounter = transform.Find("People Counter");
-		m_calendar = transform.Find("Calendar");
-		m_digitalClock = transform.Find("Digital Clock");
+		m_canvas.worldCamera = mainCamera;
+
+		m_progressBar = this.transform.GetChild(0).gameObject;
+		m_gameOverImage = this.transform.GetChild(1).gameObject;
+		m_calendar = this.transform.GetChild(2).gameObject;
+		m_digitalClock = this.transform.GetChild(3).gameObject;
+		m_peopleCounter = this.transform.GetChild(4).gameObject;
+		Debug.Log(m_progressBar);
 
 	}
 
@@ -46,39 +43,40 @@ public class UserInterfaceManager : MonoBehaviour
 		m_canvas.gameObject.SetActive(isTrue);
 	}
 
-	public Transform GetWidget(string name)
+	public GameObject GetWidget(string name)
 	{
 		string widgetName = name.ToLower();
-		Transform myTransform;
+		GameObject myObject;
 
 		switch (widgetName)
 		{
 			case "progress bar":
-				myTransform = m_progressBar;
-				return myTransform;
+				myObject = m_progressBar;
+				break;
 
 			case "game over overlay":
-				myTransform = m_gameOverImage;
-				return myTransform;
+				myObject = m_gameOverImage;
+				break;
 
 			case "people counter":
-				myTransform = m_peopleCounter;
-				return myTransform;
+				myObject = m_peopleCounter;
+				break;
 
 			case "calendar":
-				myTransform = m_calendar;
-				return myTransform;
+				myObject = m_calendar;
+				break;
 
 			case "digital clock":
-				myTransform = m_digitalClock;
-				return myTransform;
+				myObject = m_digitalClock;
+				break;
 
 			default:
 				Debug.Log("Incorrect Widget Name:" +  name);
+				myObject = null;
 				break;
 		}
 
-		return null;
+		return myObject;
 	}
 
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -32,8 +33,14 @@ public class ScoreManager : MonoBehaviour
 	{
 		if(m_userInterfaceManager != null)
 		{
-			Transform myWidget = m_userInterfaceManager.GetWidget("Progress Bar");
-			m_progressBar = myWidget.GetComponentInChildren<Slider>();
+			Transform myWidget = m_userInterfaceManager.GetWidget("Progress Bar").transform;
+			if(myWidget != null)
+			{
+				if (myWidget.GetComponent<Slider>() != null)
+				{
+					m_progressBar = myWidget.GetComponent<Slider>();
+				}
+			}
 		}
 
 		m_enemyManager.GetComponent<EnemyManager>().Init(SetupBreakables());
@@ -95,6 +102,7 @@ public class ScoreManager : MonoBehaviour
 		if (barPercentage <= 0f)
 		{
 			m_userInterfaceManager.EnableGameOverWidget(true);
+			m_userInterfaceManager.EnableProgressBar(false);
 		}
 
 		return barPercentage;
