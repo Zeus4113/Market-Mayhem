@@ -6,18 +6,22 @@ using UnityEngine;
 using UnityEngine.UI;
 //using UnityEngine.UIElements;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreManager : MonoBehaviour, IManager
 {
+	private GameManager m_gameManager;
+
 	// UI Elements
 	private Slider m_progressBar;
 	private Transform m_gameOverOverlay;
 
 	// Designer Fields
 	[SerializeField] private NavMeshSurface m_surface;
-	[SerializeField] private GameObject m_breakablePrefab;
 	[SerializeField] private GameObject m_enemyManager;
-	[SerializeField] private UserInterfaceManager m_userInterfaceManager;
-	[SerializeField] private Transform[] m_breakablePositions;
+
+	// Init Variables
+	private GameObject m_breakablePrefab;
+	private UserInterfaceManager m_userInterfaceManager;
+	private Transform[] m_breakablePositions;
 
 	// Member Variables
 	private int m_numberOfItems;
@@ -27,23 +31,27 @@ public class ScoreManager : MonoBehaviour
 
 	// Lists
 	private List<Transform> m_breakableList = new List<Transform>();
-	private List<GameObject> m_itemList = new List<GameObject>();
+	private List<Item> m_itemList = new List<Item>();
 
-	public void Init()
+	public void Init(GameManager gm, GameObject prefab, Transform[] positions)
 	{
-		if(m_userInterfaceManager != null)
-		{
-			Transform myWidget = m_userInterfaceManager.GetWidget("Progress Bar").transform;
-			if(myWidget != null)
-			{
-				if (myWidget.GetComponent<Slider>() != null)
-				{
-					m_progressBar = myWidget.GetComponent<Slider>();
-				}
-			}
-		}
+		m_gameManager = gm;
+		m_userInterfaceManager = m_gameManager.GetUIManager();
+		m_breakablePrefab = prefab;
+		m_breakablePositions = positions;
 
-		m_enemyManager.GetComponent<EnemyManager>().Init(SetupBreakables());
+		if (m_userInterfaceManager == null) return;
+		if (m_breakablePositions.Length == 0) return;
+		if(m_breakablePrefab == null) return;
+
+		Transform myWidget = m_userInterfaceManager.GetWidget("Progress Bar").transform;
+
+		if (myWidget == null) return;
+		if (myWidget.GetComponent<Slider>() == null) return;
+
+		m_progressBar = myWidget.GetComponent<Slider>();
+
+		SetupBreakables();
 	}
 
 	public void DecrementCurrentItems()
@@ -71,18 +79,22 @@ public class ScoreManager : MonoBehaviour
 
 		BindItemEvents();
 
-		m_surface.BuildNavMeshAsync();
 		m_userInterfaceManager.EnableGameOverWidget(false);
 
 		m_totalItems = m_numberOfItems;
 		return m_breakableList.ToArray();
 	}
 
+	public Item GetItem()
+	{
+		return m_itemList[Random.Range(0, m_itemList.Count - 1)];
+	}
+
 	private void BindItemEvents()
 	{
 		for(int i = 0 ; i < m_itemList.Count ; i++)
 		{
-			ItemRandomiser itemRandomiser = m_itemList[i].GetComponent<ItemRandomiser>();
+			Item itemRandomiser = m_itemList[i].GetComponent<Item>();
 			itemRandomiser.itemDestroyed += DecrementCurrentItems;
 		}
 	}

@@ -2,28 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : MonoBehaviour, IManager
 {
-	[SerializeField] private Transform[] m_spawnLocations;
+	private GameManager m_gameManager;
+	private ScoreManager m_scoreManager;
 
 	[SerializeField] private int m_spawnCount;
-	[SerializeField] private GameObject m_enemyPrefab;
 
+	private Transform[] m_spawnLocations;
+	private GameObject m_enemyPrefab;
 	private Transform[] m_breakableLocations;
+	private UserInterfaceManager m_userInterfaceManager;
 
 	List<EnemyController> m_enemyList = new List<EnemyController>();
+	List<Item> m_item = new List<Item>();
 
 	Coroutine C_SpawnEnemies;
 	bool C_IsSpawning = false;
 
-	public void Init(Transform[] breakableLocations)
+	public void Init(GameManager gm, GameObject prefab, Transform[] positions)
 	{
-		m_breakableLocations = breakableLocations;
+		m_gameManager = gm;
+		m_scoreManager = m_gameManager.GetScoreManager();
+		m_spawnLocations = positions;
+		m_userInterfaceManager = m_gameManager.GetUIManager();
+		m_enemyPrefab = prefab;
 
-		if(m_breakableLocations.Length > 0)
-		{
-			StartSpawnEnemies();
-		}
+		//if (m_breakableLocations.Length > 0)
+		//{
+		//	StartSpawnEnemies();
+		//}
+
+		StartSpawnEnemies();
+	}
+
+	public Item GetNewItem()
+	{
+		return m_scoreManager.GetItem();
 	}
 
 	void StartSpawnEnemies()
@@ -61,7 +76,7 @@ public class EnemyManager : MonoBehaviour
 				EnemyController controller = newEnemy.GetComponent<EnemyController>();
 
 				AddEnemy(controller);
-				controller.Init(m_breakableLocations[Random.Range(0, m_breakableLocations.Length)], m_spawnLocations[index], this);
+				controller.Init(m_spawnLocations[index], this);
 
 				yield return new WaitForSeconds(0.1f);
 			}

@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemRandomiser : MonoBehaviour
+public class Item : MonoBehaviour
 {
 
 	[SerializeField] private Sprite[] m_sprites;
+
+	private bool m_isPickedup = false;
 
 	public delegate void OnItemDestroyed();
 
@@ -24,6 +26,16 @@ public class ItemRandomiser : MonoBehaviour
 		mySprite = m_sprites[Random.Range(0, m_sprites.Length -1)];
 
 		return mySprite;
+	}
+
+	public void SetPickedUp(bool isPickedup)
+	{
+		m_isPickedup = isPickedup;
+	}
+
+	public bool IsPickedUp()
+	{
+		return m_isPickedup;
 	}
 
 	public void OnDestroy()

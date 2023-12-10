@@ -4,24 +4,37 @@ using UnityEngine;
 
 public class CameraSetter : MonoBehaviour
 {
-	private Camera m_camera;
-	private GameObject m_playerRef;
-	private Transform m_parentPosition;
-	private float m_offset;
-
-	public void Init(GameObject player, float offset)
+	public void StartCameraRotate()
 	{
-		m_offset = offset;
-		m_parentPosition = player.transform;
-		m_camera = GetComponent<Camera>();
+		if (C_IsRotating) return;
+
+		C_IsRotating = true;
+
+		if (C_Rotating != null) return;
+
+		C_Rotating = StartCoroutine(RotateCamera());
 	}
 
-	private void FixedUpdate()
+	public void StopCameraRotate()
 	{
-		if (m_parentPosition == null || m_offset == 0) return;
+		if (!C_IsRotating) return;
 
-		//Debug.Log("Firing");
-		transform.position = new Vector3(m_parentPosition.position.x, m_parentPosition.position.y, m_offset);
+		C_IsRotating = false;
 
+		if (C_Rotating == null) return;
+
+		StopCoroutine(C_Rotating);
+	}
+
+	bool C_IsRotating = false;
+	Coroutine C_Rotating;
+
+	private IEnumerator RotateCamera()
+	{
+		while(C_IsRotating)
+		{
+			transform.rotation = Quaternion.identity;
+			yield return new WaitForFixedUpdate();
+		}
 	}
 }

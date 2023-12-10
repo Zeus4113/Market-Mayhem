@@ -1,78 +1,168 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IManager
 {
 	// Prefabs
-	[SerializeField] GameObject prefabPlayer;
-	[SerializeField] GameObject prefabInputManager;
-	[SerializeField] GameObject prefabCamera;
-
-	// References
-	[SerializeField] private GameObject m_scoreManager;
-	[SerializeField] private GameObject m_UIManager;
-
-	[SerializeField] Vector2 m_playerSpawnPosition = new Vector2(0,0);
-	[SerializeField] float m_cameraZOffset = -10f;
+	[SerializeField] private LevelSetupData m_levelSetupData;
 
 	private GameObject m_player;
-	private GameObject m_inputManager;
-	private GameObject m_camera;
+	private Camera m_camera;
+
+	private UserInterfaceManager m_userInterfaceManager;
+	private ScoreManager m_scoreManager;
+	private EnemyManager m_enemyManager;
+
+	private SceneData m_coreScene;
+	private SceneData m_mainScene;
+	private SceneData m_userInterfaceScene;
 
 	private PlayerController m_playerController;
 	private PlayerInput m_playerInputComponent;
-	private CameraSetter m_cameraSetterComponent;
+	
+
+	public struct SceneData
+	{
+		public Scene m_scene;
+		public List<GameObject> m_rootObjects;
+	}
 
     void Start()
     {
-		SetupInput();
+		Init();
+	}
+
+	void Init()
+	{
+		if (m_levelSetupData == null) return;
+
+		SetupGameScenes();
 		SetupPlayer();
-		SetupUIManager();
-		SetupScoreManager();
-	}
-
-	void SetupScoreManager()
-	{
-		if (m_scoreManager != null)
+		GetManagerReferences();
+		
+		if(m_userInterfaceManager != null)
 		{
-			m_scoreManager.GetComponent<ScoreManager>().Init();
+			InitializeUIManager();
 		}
-	}
-
-	void SetupUIManager()
-	{
-		if(m_UIManager != null)
+		
+		if(m_scoreManager != null)
 		{
-			m_UIManager.GetComponent<UserInterfaceManager>().Init(m_camera.GetComponent<Camera>());
+			InitializeScoreManager();
 		}
+
+        if (m_enemyManager != null)
+        {
+			InitializeEnemyManager();
+		}
+
 	}
 
-	void SetupInput()
-	{
-		// Spawn Input Manager
-		m_inputManager = Instantiate(prefabInputManager, new Vector3(0, 0, 0), Quaternion.identity);
+	// Setup Functions
 
-		// Grab Components
-		m_playerInputComponent = m_inputManager.GetComponent<PlayerInput>();
+	void SetupGameScenes()
+	{
+		m_mainScene.m_scene = AddScene("MainScene");
+		m_userInterfaceScene.m_scene = AddScene("UIScene");
 	}
 
 	void SetupPlayer()
 	{
-		// Spawn Player and Camera
-		m_player = Instantiate(prefabPlayer, new Vector3(m_playerSpawnPosition.x, m_playerSpawnPosition.y, 0f), Quaternion.identity);
-		m_camera = Instantiate(prefabCamera, new Vector3(m_playerSpawnPosition.x, m_playerSpawnPosition.y, -10f), Quaternion.identity);
+		m_playerInputComponent = GetComponent<PlayerInput>();
 
-		Debug.Log(m_playerSpawnPosition);
+		// Spawn Player and Camera
+		m_player = Instantiate(m_levelSetupData.GetPlayerPrefab(), new Vector3(m_levelSetupData.GetPlayerPosition().position.x, m_levelSetupData.GetPlayerPosition().position.y, 0f), Quaternion.identity);
 
 		// Grab Components
 		m_playerController = m_player.GetComponent<PlayerController>();
-		m_cameraSetterComponent = m_camera.GetComponent<CameraSetter>();
+		m_camera = m_player.GetComponentInChildren<Camera>();
 
 		// Initialize Components
 		m_playerController.Init(m_playerInputComponent);
-		m_cameraSetterComponent.Init(m_player, m_cameraZOffset);
+	}
+
+	void GetManagerReferences()
+	{
+		m_userInterfaceScene.m_rootObjects = new List<GameObject>();
+
+		m_userInterfaceScene.m_rootObjects.AddRange(m_userInterfaceScene.m_scene.GetRootGameObjects());
+
+		for(int i = 0; i < m_userInterfaceScene.m_rootObjects.Count; i++)
+		{
+			if (m_userInterfaceScene.m_rootObjects[i].GetComponent<UserInterfaceManager>())
+			{
+				m_userInterfaceManager = m_userInterfaceScene.m_rootObjects[i].GetComponent<UserInterfaceManager>();
+			}
+		}
+
+		m_mainScene.m_rootObjects = new List<GameObject>();
+
+		m_mainScene.m_rootObjects.AddRange(m_mainScene.m_scene.GetRootGameObjects());
+
+		for (int i = 0; i < m_mainScene.m_rootObjects.Count; i++)
+		{
+			if (m_mainScene.m_rootObjects[i].GetComponent<EnemyManager>())
+			{
+				m_enemyManager = m_mainScene.m_rootObjects[i].GetComponent<EnemyManager>();
+			}
+
+			if (m_mainScene.m_rootObjects[i].GetComponent<ScoreManager>())
+			{
+				m_scoreManager = m_mainScene.m_rootObjects[i].GetComponent<ScoreManager>();
+			}
+		}
+	}
+
+	// Initialization Functions
+
+	void InitializeUIManager()
+	{
+		m_userInterfaceManager.Init(this, m_camera);
+	}
+
+	void InitializeEnemyManager()
+	{
+		m_enemyManager.Init(this, m_levelSetupData.GetEnemyPrefab(), m_levelSetupData.GetEnemyPositions());
+	}
+
+	void InitializeScoreManager()
+	{
+		m_scoreManager.Init(this, m_levelSetupData.GetBreakablePrefab(), m_levelSetupData.GetBreakablePositions());
+	}
+
+	// Scene Management
+	Scene AddScene(string sceneName)
+	{
+
+		SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+		Scene newScene = SceneManager.GetSceneByName(sceneName);
+
+		return newScene;
+	}
+
+	void RemoveScene(string sceneName)
+	{
+		SceneManager.UnloadSceneAsync(sceneName);
+	}
+
+	// Getters
+	public UserInterfaceManager GetUIManager()
+	{
+		return m_userInterfaceManager;
+	}
+
+	public EnemyManager GetEnemyManager()
+	{
+		return m_enemyManager;
+	}
+
+	public ScoreManager GetScoreManager()
+	{
+		return m_scoreManager;
 	}
 
 }

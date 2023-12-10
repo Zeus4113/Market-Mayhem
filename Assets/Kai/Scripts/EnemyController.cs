@@ -17,7 +17,7 @@ public class EnemyController : MonoBehaviour
 
 	private EnemyManager m_manager;
 
-	private Transform m_targetBreakable;
+	private Item m_targetItem;
 	private Transform m_targetDoor;
 
 	private GameObject m_pickedItem;
@@ -27,17 +27,33 @@ public class EnemyController : MonoBehaviour
 	private Rigidbody2D m_rigidbody;
 	private Collider2D m_collider;
 
-	public void Init(Transform targetBreakable, Transform targetItem, EnemyManager enemyManager)
+	public void Init(Transform targetDoor, EnemyManager enemyManager)
 	{
-		m_targetBreakable = targetBreakable;
-		m_targetDoor = targetItem;
+		m_targetDoor = targetDoor;
 		m_manager = enemyManager;
-
+		m_targetItem = GetTargetItem();
 		m_rigidbody = GetComponent<Rigidbody2D>();
 		m_pickedItem = null;
 		m_currentState = EnemyStates.Searching;
 
 		StartStateMachine();
+	}
+
+	public Item GetTargetItem()
+	{
+		while (true)
+		{
+			Item newItem = m_manager.GetNewItem();
+
+			if (newItem.IsPickedUp())
+			{
+				newItem = m_manager.GetNewItem();
+			}
+			else if(!newItem.IsPickedUp())
+			{
+				return newItem;
+			}
+		}
 	}
 
 	Coroutine C_StateMachine;
@@ -76,15 +92,15 @@ public class EnemyController : MonoBehaviour
 			{
 				case EnemyStates.Searching:
 
-					if (m_targetBreakable.GetComponent<ItemStore>().CheckRemainingItems())
+					if (m_targetItem)
 					{
-						Move(m_targetBreakable);
+						Move(m_targetItem.transform);
 					}
 					else
 					{
-						m_targetBreakable = m_manager.GetNewBreakable();
+						m_targetItem = GetTargetItem();
 
-						if(m_targetBreakable == null)
+						if(m_targetItem == null)  
 						{
 							m_manager.RemoveEnemy(this);
 						}
@@ -131,9 +147,10 @@ public class EnemyController : MonoBehaviour
 		transform.up = direction;
 	}
 
-	public void AddItem(GameObject item)
+	public void AddItem(Item item)
 	{
-		m_pickedItem = item;
+		item.SetPickedUp(true);
+		m_pickedItem = item.gameObject;
 		m_pickedItem.transform.parent = transform;
 		m_pickedItem.transform.position = transform.position;
 		SetEnemyState(EnemyStates.Fleeing);

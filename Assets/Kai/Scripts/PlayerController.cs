@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 	private PlayerActions m_leftHand;
 	private PlayerActions m_rightHand;
 	private PlayerMovement m_movement;
+	private CameraSetter m_cameraSetter;
 
 	private Transform m_leftHandPosition;
 	private Transform m_rightHandPosition;
@@ -32,6 +33,9 @@ public class PlayerController : MonoBehaviour
         m_leftSwingPosition = swingPositions.GetChild(1);
         m_rightSwingPosition = swingPositions.GetChild(0);
 
+		Transform cameraPosition = this.transform.Find("Camera");
+		m_cameraSetter = cameraPosition.GetComponent<CameraSetter>();
+
         SetupHands();
 		InitialisePlayerComponents();
 	}
@@ -41,6 +45,7 @@ public class PlayerController : MonoBehaviour
 		m_movement.Init(m_playerInputComponent);
 		m_leftHand.Init(m_playerInputComponent, m_leftHandPosition, m_leftSwingPosition, this, "left");
 		m_rightHand.Init(m_playerInputComponent, m_rightHandPosition, m_rightSwingPosition, this, "right");
+		m_cameraSetter.StartCameraRotate();
 	}
 
 	private void SetupHands()

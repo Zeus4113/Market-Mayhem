@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UserInterfaceManager : MonoBehaviour
+public class UserInterfaceManager : MonoBehaviour, IManager
 {
+	private GameManager m_gameManager;
+
 	private Canvas m_canvas;
 	private GameObject m_progressBar;
 	private GameObject m_gameOverImage;
@@ -12,8 +14,10 @@ public class UserInterfaceManager : MonoBehaviour
 	private GameObject m_calendar;
 	private GameObject m_peopleCounter;
 
-	public void Init(Camera mainCamera)
+	public void Init(GameManager gm, Camera mainCamera)
 	{
+		m_gameManager = gm;
+
 		m_canvas = GetComponent<Canvas>();
 
 		m_canvas.worldCamera = mainCamera;
