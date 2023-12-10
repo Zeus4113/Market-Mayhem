@@ -12,10 +12,12 @@ public class LoadingScreen : MonoBehaviour
     private IEnumerator LoadNextLevel(string levelName)
     {
         AsyncOperation loadlevel = SceneManager.LoadSceneAsync(levelName);
+
+		yield return null;
     }
 
     private void Start()
     {
-        StartCoroutine(LoadNextLevel());
+       // StartCoroutine(LoadNextLevel());
     }
 }
