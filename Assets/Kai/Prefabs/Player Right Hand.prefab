@@ -178,3 +178,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_punchForce: 50
   m_attackCooldown: 0.5
+  m_emptyHandSprite: {fileID: 21300000, guid: 3fce077f6f9ac0940afe550f2a4ebaab, type: 3}
+  m_holdingHandSprite: {fileID: 21300000, guid: 60cd6612de9cae54c87e765975617178, type: 3}
+  m_punchAnimator: {fileID: 6256487518432782734, guid: 0aeb763b4f40ddf4ba8bc0a37364e8e8, type: 3}

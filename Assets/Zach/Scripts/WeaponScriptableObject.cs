@@ -13,4 +13,7 @@ public class WeaponScriptableObject : ScriptableObject
     public float m_rotationOffset;
     public float m_damage;
     public float m_knockback;
+
+    public bool m_ranged;
+    public Sprite m_projectileSprite;
 }

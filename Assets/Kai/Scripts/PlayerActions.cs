@@ -9,8 +9,11 @@ public class PlayerActions : MonoBehaviour
 {
 	[SerializeField] private float m_punchForce;
 	[SerializeField] private float m_attackCooldown;
+	[SerializeField] private Sprite m_emptyHandSprite;
+	[SerializeField] private Sprite m_holdingHandSprite;
+	[SerializeField] private GameObject m_punchAnimator;
 
-	private PlayerController m_playerController;
+    private PlayerController m_playerController;
 	private Rigidbody2D m_handRB;
 	private Transform m_handHomeTransform;
 	private Transform m_savedHandHomeTransform;
@@ -31,10 +34,16 @@ public class PlayerActions : MonoBehaviour
 	private GameObject HeldItem;
 
 	private Sprite m_handSprite;
+	private Rigidbody2D m_punchAnimRB;
+
+	private int m_handSideMultiplier;
 
 	private void Awake()
 	{
 		m_handRB = this.GetComponent<Rigidbody2D>();
+		m_punchAnimator = Instantiate(m_punchAnimator, transform.position, transform.rotation);
+		m_punchAnimator.SetActive(false);
+		m_punchAnimRB = m_punchAnimator.GetComponent<Rigidbody2D>();
 	}
 
 	public void Init(PlayerInput inputComponent, Transform homeLocation, Transform swingPosition, PlayerController characterController, string handSide)
@@ -45,6 +54,16 @@ public class PlayerActions : MonoBehaviour
 		m_savedHandHomeTransform = homeLocation;
 		m_savedSwingTransform = swingPosition;
 		m_playerController = characterController;
+
+		switch (m_handSide)
+		{
+			case "left":
+				m_handSideMultiplier = 1;
+				break;
+			case "right":
+                m_handSideMultiplier = -1;
+                break;
+		}
 
 		BindEvents(true);
 		StartCheckCoroutine();
@@ -141,7 +160,15 @@ public class PlayerActions : MonoBehaviour
 
 			if (Vector2.Distance(this.transform.position, m_handHomeTransform.position) < 0.5f)
 			{
-				this.transform.rotation = m_playerController.transform.rotation;
+                this.transform.rotation = m_playerController.transform.rotation;
+                switch (IsHolding)
+				{
+					case true:
+                        this.transform.rotation *= Quaternion.Euler(m_playerController.transform.forward * 90 * m_handSideMultiplier);
+                        break;
+					case false:
+                        break;
+				}
 			}
 
 			yield return new WaitForFixedUpdate();
@@ -209,11 +236,13 @@ public class PlayerActions : MonoBehaviour
 				switch (m_handSide.ToLower())
 				{
 					case "left":
-                        m_handRB.AddForce((transform.up + transform.right) * m_punchForce, ForceMode2D.Impulse);
+                        this.transform.rotation *= Quaternion.Euler(m_playerController.transform.forward * 90 * m_handSideMultiplier);
+                        m_handRB.AddForce((m_playerController.transform.up + m_playerController.transform.right/2) * m_punchForce, ForceMode2D.Impulse);
                         m_handRB.AddTorque(-2500f);
                         break;
 					case "right":
-                        m_handRB.AddForce((transform.up - transform.right) * m_punchForce, ForceMode2D.Impulse);
+                        this.transform.rotation *= Quaternion.Euler(m_playerController.transform.forward * 90 * m_handSideMultiplier);
+                        m_handRB.AddForce((m_playerController.transform.up - m_playerController.transform.right/2) * m_punchForce, ForceMode2D.Impulse);
                         m_handRB.AddTorque(2500f);
                         break;
 				}            
@@ -221,6 +250,7 @@ public class PlayerActions : MonoBehaviour
                 break;
 
 			case false:
+				StartCoroutine(PlayAnimation());
                 m_handRB.AddForce(transform.up * m_punchForce, ForceMode2D.Impulse);
 				break;
         }
@@ -231,14 +261,42 @@ public class PlayerActions : MonoBehaviour
         canAttack = true;
     }
 
+	private IEnumerator PlayAnimation()
+	{
+		m_punchAnimator.transform.position = this.transform.position;
+        m_punchAnimator.transform.rotation = this.transform.rotation;
+
+        m_punchAnimator.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+
+        m_punchAnimator.SetActive(false);
+    }
+
 	public void SetHolding(bool HoldingBool, GameObject Item)
 	{
 		IsHolding = HoldingBool;
 		HeldItem = Item;
+
+		switch (IsHolding)
+		{
+			case true:
+				GetComponent<SpriteRenderer>().sprite = m_holdingHandSprite;
+				m_handHomeTransform = m_savedSwingTransform;
+				break;
+			case false:
+				GetComponent<SpriteRenderer>().sprite = m_emptyHandSprite;
+                m_handHomeTransform = m_savedHandHomeTransform;
+                break;
+		}
 	}
 
 	public bool GetHolding()
 	{
 		return IsHolding;
+	}
+
+	public PlayerController GetPlayerController()
+	{
+		return m_playerController;
 	}
 }

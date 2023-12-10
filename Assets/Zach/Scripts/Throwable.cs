@@ -110,12 +110,12 @@ public class Throwable : MonoBehaviour
             switch (m_handSide.ToLower())
             {
                 case "left":
-                    this.transform.position += m_playerHand.transform.right * -m_handleOffset;
+                    this.transform.position += m_playerHand.transform.right * m_handleOffset;
                     m_weaponRot *= Quaternion.Euler(Vector3.forward * m_rotationOffset);
 
                     break;
                 case "right":
-                    this.transform.position += m_playerHand.transform.right * m_handleOffset;
+                    this.transform.position += m_playerHand.transform.right * -m_handleOffset;
                     m_weaponRot *= Quaternion.Euler(Vector3.forward * (m_rotationOffset + 180));
 
                     break;
@@ -131,7 +131,7 @@ public class Throwable : MonoBehaviour
         m_pickedUp = false;
         OnDropped();
         //this.transform.parent = null;
-        this.GetComponent<Rigidbody2D>().AddForce(m_playerHand.transform.up * 10, ForceMode2D.Impulse);
+        this.GetComponent<Rigidbody2D>().AddForce(m_playerHand.GetComponent<PlayerActions>().GetPlayerController().transform.up * 10, ForceMode2D.Impulse);
         switch (m_handSide.ToLower())
         {
             case "left":
