@@ -10,14 +10,19 @@ public class Throwable : MonoBehaviour
 
 
     private Rigidbody2D m_playerHand;
-    bool m_pickedUp = false;
-    bool m_canPickUp = true;
-    Quaternion m_weaponRot;
-    PlayerInput m_playerInput;
-    string m_handSide;
-    int m_durability;
-    float m_handleOffset;
-    float m_rotationOffset;
+    private bool m_pickedUp = false;
+    private bool m_canPickUp = true;
+    private Quaternion m_weaponRot;
+    private PlayerInput m_playerInput;
+    private string m_handSide;
+    private int m_durability;
+    private float m_handleOffset;
+    private float m_rotationOffset;
+    private Sprite m_spriteDamaged;
+    private Sprite m_spriteDestroyed;
+    private int m_maxDurability;
+    private ParticleSystem m_breakParticles;
+
 
     private SpriteRenderer m_spriteRenderer;
 
@@ -33,6 +38,12 @@ public class Throwable : MonoBehaviour
         m_handleOffset = weaponData.m_handleOffset;
         m_rotationOffset = weaponData.m_rotationOffset;
         m_durability = weaponData.m_durability;
+        m_maxDurability = m_durability;
+
+        m_spriteDamaged = weaponData.m_spriteDamaged;
+        m_spriteDestroyed = weaponData.m_spriteDestroyed;
+
+        m_breakParticles = Instantiate(myWeaponData.m_breakParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
     }
 
     public void SetAttached(PlayerInput playerInputComponent, string HandSide)
@@ -45,6 +56,7 @@ public class Throwable : MonoBehaviour
 
     private void WeaponDestroyed()
     {
+        m_spriteRenderer.sprite = m_spriteDestroyed;
         m_canPickUp = false;
         switch (m_handSide)
         {
@@ -58,6 +70,12 @@ public class Throwable : MonoBehaviour
                 m_playerHand.GetComponent<PlayerActions>().BindEvents(false);
                 break;
         }
+    }
+
+    private void PlayBreakParticles()
+    {
+        m_breakParticles.transform.position = transform.position;
+        m_breakParticles.Play();
     }
 
     private void OnDropped()
@@ -156,6 +174,15 @@ public class Throwable : MonoBehaviour
     public void EditDurability(int DurabilityIncrement)
     {
         m_durability += DurabilityIncrement;
-        if (m_durability <= 0) WeaponDestroyed();
+        if (m_durability <= 0)
+        {
+            PlayBreakParticles();
+            WeaponDestroyed();
+        }
+        else if (m_durability == Mathf.Floor(m_maxDurability / 2))
+        {
+            m_spriteRenderer.sprite = m_spriteDamaged;
+            PlayBreakParticles();
+        }
     }
 }

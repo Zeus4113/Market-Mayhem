@@ -8,6 +8,10 @@ public class WeaponScriptableObject : ScriptableObject
 {
     public Sprite m_spriteEquipped;
     public Sprite m_spriteUnequipped;
+    public Sprite m_spriteDamaged;
+    public Sprite m_spriteDestroyed;
+    public GameObject m_breakParticles;
+
     public int m_durability;
     public float m_handleOffset;
     public float m_rotationOffset;

@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spriteEquipped: {fileID: 21300000, guid: 67e6112681b037c428698538c3f60d4b, type: 3}
   m_spriteUnequipped: {fileID: 21300000, guid: 67e6112681b037c428698538c3f60d4b, type: 3}
+  m_spriteDamaged: {fileID: 21300000, guid: 36410d8566ec62b41985845bea1d335d, type: 3}
+  m_spriteDestroyed: {fileID: 21300000, guid: 368d33cf4aa2bb947a423cc4ccd895a1, type: 3}
+  m_breakParticles: {fileID: 52453051734204284, guid: 1dab48389ec657d44a2ccf093a4e9847, type: 3}
   m_durability: 4
   m_handleOffset: 0.25
   m_rotationOffset: 315

@@ -265,6 +265,7 @@ public class PlayerActions : MonoBehaviour
 	{
 		m_punchAnimator.transform.position = this.transform.position;
         m_punchAnimator.transform.rotation = this.transform.rotation;
+		m_punchAnimRB.AddForce(transform.up * m_punchForce, ForceMode2D.Impulse);
 
         m_punchAnimator.SetActive(true);
         yield return new WaitForSeconds(0.5f);
