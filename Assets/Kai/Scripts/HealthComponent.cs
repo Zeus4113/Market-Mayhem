@@ -33,6 +33,8 @@ public class HealthComponent : MonoBehaviour, IDamageable
 		{
 			Instantiate(m_deadEnemy, transform.position, transform.rotation);
 			EnemyController enemyController = GetComponent<EnemyController>();
+
+			enemyController.DropItem();
 			enemyController.GetEnemyManager().RemoveEnemy(enemyController);
 		}
 	}
