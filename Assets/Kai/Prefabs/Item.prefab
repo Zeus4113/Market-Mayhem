@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -103,6 +103,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6d055093c03edb541948047c055e25e6, type: 3}
   - {fileID: 21300000, guid: 5ee94d8730a775e429f7177a0fab8f99, type: 3}
   - {fileID: 21300000, guid: efcd29708da4f80408233508c5aa0c6e, type: 3}
+  - {fileID: 21300000, guid: 91a499d3a00ed4042a62028d7ba38517, type: 3}
+  - {fileID: 21300000, guid: 5b7a8733c376de44eb35a8e0bd1e5806, type: 3}
+  - {fileID: 21300000, guid: e3640e55fe104b64da68e3357e20ac25, type: 3}
+  - {fileID: 21300000, guid: dd1228986aa84cf45b58d91f6ff5b028, type: 3}
+  - {fileID: 21300000, guid: c771ad6fc7daf1b48a7208b7d5e5a834, type: 3}
+  - {fileID: 21300000, guid: e4b5ec1e7119f8547a9b75ba577f1040, type: 3}
+  - {fileID: 21300000, guid: fe22363d4534bf04ba3527ee8ab34668, type: 3}
 --- !u!58 &4751232822200093163
 CircleCollider2D:
   m_ObjectHideFlags: 0

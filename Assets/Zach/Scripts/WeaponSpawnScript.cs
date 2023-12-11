@@ -7,38 +7,50 @@ public class WeaponSpawnScript : MonoBehaviour
 {
     [SerializeField] private WeaponScriptableObject[] weaponTypes;
     [SerializeField] private GameObject m_weaponPrefab;
+	[SerializeField] private float m_spawnDelay = 1f;
+	[SerializeField] private int m_spawnAmount;
 
     private Transform[] children;
     private int randomInt;
     private GameObject spawnedWeapon;
     private WeaponScriptableObject weaponType;
 
-    private void Awake()
+	public void Init()
+	{
+		children = GetComponentsInChildren<Transform>();
+	}
+
+	bool C_IsSpawning = false;
+	Coroutine C_Spawning;
+
+    public void BeginSpawning()
     {
-        children = GetComponentsInChildren<Transform>();
-        beginSpawning();
+		if (C_IsSpawning) return;
+		C_IsSpawning = true;
+
+		if (C_Spawning != null) return;
+        C_Spawning = StartCoroutine(SpawnWeapon());
     }
 
-    private void beginSpawning()
+    private void StopSpawning()
     {
-        StartCoroutine(spawnWeapon());
+		if (!C_IsSpawning) return;
+		C_IsSpawning = false;
+
+		if (C_Spawning == null) return;
+		StopCoroutine(C_Spawning);
     }
 
-    private void stopSpawning()
+    private IEnumerator SpawnWeapon()
     {
-        StopCoroutine(spawnWeapon());
-    }
-
-    private IEnumerator spawnWeapon()
-    {
-        while (true)
+        while (C_IsSpawning)
         {
             randomInt = UnityEngine.Random.Range(1, children.Length);
             spawnedWeapon = Instantiate(m_weaponPrefab, children[randomInt].position, children[randomInt].rotation);
             weaponType = weaponTypes[UnityEngine.Random.Range(0, weaponTypes.Length)];
             spawnedWeapon.GetComponent<Throwable>().Init(weaponType);        
 
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(m_spawnDelay);
         }
     }
 }

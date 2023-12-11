@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
 	private ScoreManager m_scoreManager;
 	private UserInterfaceManager m_UIManager;
 	private EnemyManager m_enemyManager;
+	private WeaponSpawnScript m_weaponManager;
 	[Space(2)]
 
 	[Header("Level Data")]
@@ -100,6 +101,7 @@ public class GameManager : MonoBehaviour
 		SetupUIManager();
 		SetupScoreManager();
 		SetupEnemyManager();
+		SetupWeaponManager();
 		m_scoreManager.SetupBreakables();
 	}
 
@@ -108,6 +110,7 @@ public class GameManager : MonoBehaviour
 		m_scoreManager = transform.Find("Score Manager").GetComponent<ScoreManager>();
 		m_enemyManager = transform.Find("Enemy Manager").GetComponent<EnemyManager>();
 		m_UIManager = transform.Find("UI Manager").GetComponent<UserInterfaceManager>();
+		m_weaponManager = transform.Find("Weapon Spawn Manager").GetComponent<WeaponSpawnScript>();
 	}
 
 	void GetTransformData()
@@ -171,10 +174,17 @@ public class GameManager : MonoBehaviour
 	
 	}
 
+	void SetupWeaponManager()
+	{
+		if (m_weaponManager == null) return;
+		m_weaponManager.Init();
+	}
+
 	public void StartGame()
 	{
 		m_UIManager.StartGame();
 		m_enemyManager.StartSpawnEnemies();
+		m_weaponManager.BeginSpawning();
 	}
 
 	public EnemyManager GetEnemyManager() { return m_enemyManager; }
