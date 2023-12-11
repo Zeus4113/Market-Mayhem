@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d97b707419ff264aae085f55f08a592, type: 3}
   m_Name: NailGunWeapon
   m_EditorClassIdentifier: 
-  m_spriteEquipped: {fileID: 21300000, guid: 4e41ed0062ff591429c136971cf1f0ba, type: 3}
-  m_spriteUnequipped: {fileID: 21300000, guid: df30f14e226f0d740a5b3727eab6ae5a, type: 3}
-  m_spriteDamaged: {fileID: 21300000, guid: 4e41ed0062ff591429c136971cf1f0ba, type: 3}
-  m_spriteDestroyed: {fileID: 21300000, guid: 4e41ed0062ff591429c136971cf1f0ba, type: 3}
+  m_spriteEquipped: {fileID: 21300000, guid: c4cb9c97938f4f84983b02de5219b78a, type: 3}
+  m_spriteUnequipped: {fileID: 21300000, guid: 08accf4be8b6f38419b948a1cfce0588, type: 3}
+  m_spriteDamaged: {fileID: 21300000, guid: c4cb9c97938f4f84983b02de5219b78a, type: 3}
+  m_spriteDestroyed: {fileID: 21300000, guid: 08accf4be8b6f38419b948a1cfce0588, type: 3}
   m_breakParticles: {fileID: 52453051734204284, guid: 1dab48389ec657d44a2ccf093a4e9847, type: 3}
   m_explodeParticles: {fileID: 0}
   m_hitParticles: {fileID: 5659918374015372325, guid: c64480e6b0055c94c910c4081df838a4, type: 3}
   m_durability: 10
-  m_handleOffset: 0
+  m_handleOffset: 0.05
+  m_handleVertOffset: 0.2
   m_rotationOffset: 0
   m_damage: 2
   m_knockback: 20

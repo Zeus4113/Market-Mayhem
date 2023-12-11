@@ -21,9 +21,10 @@ MonoBehaviour:
   m_hitParticles: {fileID: 5659918374015372325, guid: c64480e6b0055c94c910c4081df838a4, type: 3}
   m_durability: 5
   m_handleOffset: 0.25
+  m_handleVertOffset: 0.05
   m_rotationOffset: 270
   m_damage: 8
   m_knockback: 50
   m_explodeOnThrow: 0
   m_ranged: 0
-  m_projectileSprite: {fileID: 0}
+  m_projectilePrefab: {fileID: 0}

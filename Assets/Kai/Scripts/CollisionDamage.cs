@@ -10,6 +10,7 @@ public class CollisionDamage : MonoBehaviour
 
 	private ParticleSystem m_hitParticles;
 	private Rigidbody2D m_rigidbody;
+	private bool m_attacking = false;
 
 	private void Start()
 	{
@@ -27,14 +28,14 @@ public class CollisionDamage : MonoBehaviour
 		IDamageable damageable = collision.GetComponent<IDamageable>();
 		EnemyController controller = collision.GetComponent<EnemyController>();
 
-		//Debug.Log("Damage: " + m_rigidbody.velocity.magnitude * m_damageMultiplier);
+		Debug.Log("Damage: " + m_rigidbody.velocity.magnitude * m_damageMultiplier);
 		damageable.Damage(m_rigidbody.velocity.magnitude * m_damageMultiplier);
 
 		Vector2 force = new Vector2(m_rigidbody.velocity.x * m_forceMultiplier, m_rigidbody.velocity.y * m_forceMultiplier);
 
 		//Debug.Log(force);
 
-		if (m_hitParticlesObject)
+		if (m_hitParticlesObject && m_attacking)
 		{
 			m_hitParticles.transform.position = transform.position;
 			m_hitParticles.Play();
@@ -66,5 +67,10 @@ public class CollisionDamage : MonoBehaviour
 	public void SetHitParicles(GameObject hitParticles)
 	{
 		m_hitParticles = Instantiate(hitParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
+	}
+
+	public void SetAttacking(bool attacking)
+	{
+		m_attacking = attacking;
 	}
 }

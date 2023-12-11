@@ -260,13 +260,16 @@ public class PlayerActions : MonoBehaviour
 				break;
         }
         canAttack = false;
+		m_damageComponent.SetAttacking(true);
 
         yield return new WaitForSeconds(m_attackCooldown);
 
         canAttack = true;
+        m_damageComponent.SetAttacking(false);
+
     }
 
-	private IEnumerator PlayAnimation()
+    private IEnumerator PlayAnimation()
 	{
 		m_punchAnimator.transform.position = this.transform.position;
         m_punchAnimator.transform.rotation = this.transform.rotation;
@@ -295,6 +298,7 @@ public class PlayerActions : MonoBehaviour
 				GetComponent<SpriteRenderer>().sprite = m_emptyHandSprite;
                 m_handHomeTransform = m_savedHandHomeTransform;
                 m_damageComponent.enabled = true;
+				if (m_ranged) GetComponent<SpriteRenderer>().sprite = m_holdingHandSprite;
                 break;
 		}
 	}

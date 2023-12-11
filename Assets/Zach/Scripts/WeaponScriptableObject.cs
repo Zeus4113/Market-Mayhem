@@ -16,6 +16,7 @@ public class WeaponScriptableObject : ScriptableObject
 
     public int m_durability = 0;
     public float m_handleOffset = 0;
+    public float m_handleVertOffset = 0.05f;
     public float m_rotationOffset = 0;
     public float m_damage = 0;
     public float m_knockback = 0;

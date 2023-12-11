@@ -9,6 +9,12 @@ public class ShootingComponent : MonoBehaviour
     private GameObject m_projectile;
     private Rigidbody2D m_playerHand;
     private GameObject m_spawnedProjectile;
+    private Throwable m_throwable;
+
+    private void Awake()
+    {
+        m_throwable = this.gameObject.GetComponent<Throwable>();
+    }
 
     public void BindEvents(bool bindBool, PlayerInput playerInputComponent, string handSide)
     {
@@ -41,9 +47,9 @@ public class ShootingComponent : MonoBehaviour
 
     private void Fire(InputAction.CallbackContext ctx)
     {
-        Debug.Log("Fire ranged weapon");
         m_spawnedProjectile = Instantiate(m_projectile, transform.position, transform.rotation);
         m_spawnedProjectile.GetComponent<Projectile>().FireProjectile(m_playerHand.transform, 50f);
+        m_throwable.EditDurability(-1);
     }
 
     public void SetProjectile(GameObject projectile)

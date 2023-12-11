@@ -17,6 +17,7 @@ public class Throwable : MonoBehaviour
     private string m_handSide;
     private int m_durability;
     private float m_handleOffset;
+    private float m_handleVertOffset;
     private float m_rotationOffset;
     private Sprite m_spriteDamaged;
     private Sprite m_spriteDestroyed;
@@ -46,6 +47,7 @@ public class Throwable : MonoBehaviour
 
         m_spriteRenderer.sprite = weaponData.m_spriteUnequipped;
         m_handleOffset = weaponData.m_handleOffset;
+        m_handleVertOffset = weaponData.m_handleVertOffset;
         m_rotationOffset = weaponData.m_rotationOffset;
         m_durability = weaponData.m_durability;
         m_maxDurability = m_durability;
@@ -141,7 +143,7 @@ public class Throwable : MonoBehaviour
         {
             m_throwableExplosion.SetCanExplode(true);
         }
-        if (m_ranged) m_playerInput.GetComponent<PlayerActions>().BindEvents(false);
+        if (m_ranged) m_playerHand.GetComponent<PlayerActions>().BindEvents(true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -178,16 +180,17 @@ public class Throwable : MonoBehaviour
             switch (m_handSide.ToLower())
             {
                 case "left":
-                    this.transform.position += m_playerHand.transform.right * m_handleOffset;
+                    this.transform.position += (m_playerHand.transform.right * m_handleOffset);
                     m_weaponRot *= Quaternion.Euler(Vector3.forward * m_rotationOffset);
 
                     break;
                 case "right":
-                    this.transform.position += m_playerHand.transform.right * -m_handleOffset;
+                    this.transform.position += (m_playerHand.transform.right * -m_handleOffset);
                     m_weaponRot *= Quaternion.Euler(Vector3.forward * (m_rotationOffset + 180));
 
                     break;
             }
+            this.transform.position += (m_playerHand.transform.up * m_handleVertOffset);
 
             this.transform.rotation = m_weaponRot;
         }
