@@ -16,7 +16,7 @@ MonoBehaviour:
   m_cameraPrefab: {fileID: 4767596883235728661, guid: 825e6d1a8fb2fe1419aeae8242b0e3d5, type: 3}
   m_playerInputPrefab: {fileID: 3518103070271731478, guid: 448f351fc25788e41ba881667e26da23, type: 3}
   m_playerCameraOffset: -7.5
-  m_breakablePrefab: {fileID: 2279140934922899179, guid: 0b7664c637274e646bcb113f151b3594, type: 3}
+  m_breakablePrefab: {fileID: 2279140934922899179, guid: f88ac2618a7af564886bf02e7893ae40, type: 3}
   m_itemPrefab: {fileID: 6716341007058586434, guid: 70175b32c21d2f54eb709ac525943033, type: 3}
   m_enemyPrefab: {fileID: 7559081894675011683, guid: 58236e7a057dc154490309166071606b, type: 3}
   m_enemyCount: 12
