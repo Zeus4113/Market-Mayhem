@@ -40,11 +40,7 @@ public class UserInterfaceManager : MonoBehaviour
 		m_progressBarSlider = m_progressBar.GetComponentInChildren<Slider>();
 		m_peopleCounterText = m_peopleCounter.GetComponentInChildren<TMPro.TextMeshProUGUI>();
 
-		m_progressBar.SetActive(false);
 		m_calendar.SetActive(true);
-		m_digitalClock.SetActive(false);
-		m_peopleCounter.SetActive(false);
-
 	}
 
 	public void StartGame()

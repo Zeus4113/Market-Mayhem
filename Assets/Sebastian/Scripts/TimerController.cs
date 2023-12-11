@@ -19,12 +19,17 @@ public class TimerController : MonoBehaviour
 
     public event TimerHit OnDayEnd;
 
-    private void Start()
-    {
-        StartCounter(09, 00);
-    }
+	private void OnEnable()
+	{
+		StartCounter(09, 00);
+	}
 
-    bool isCounting = false;
+	private void OnDisable()
+	{
+		StopAllCoroutines();
+	}
+
+	bool isCounting = false;
     Coroutine C_Counting;
 
     private void StartCounter(int startingHour, int startingMinute)
@@ -56,6 +61,7 @@ public class TimerController : MonoBehaviour
 
         while (isCounting)
         {
+			Debug.Log(string.Format("{0:00}:{1:00}", hours, minutes));
             minutes++;
 
             if (minutes >= 60)
