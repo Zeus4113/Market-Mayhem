@@ -35,7 +35,7 @@ public class Projectile : MonoBehaviour
             {
                 StopCoroutine(C_LifeSpan);
                 C_LifeSpan = null;
-                this.gameObject.SetActive(false);
+                Destroy(this.gameObject);
             }
         }
     }

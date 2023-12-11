@@ -7,14 +7,17 @@ public class CollisionDamage : MonoBehaviour
 	[SerializeField] private float m_damageMultiplier = 10f;
 	[SerializeField] private float m_forceMultiplier = 10f;
 	[SerializeField] private GameObject m_hitParticlesObject;
+	[SerializeField] private AudioClip m_hitAudioClip;
 
 	private ParticleSystem m_hitParticles;
 	private Rigidbody2D m_rigidbody;
 	private bool m_attacking = false;
+	private AudioPlayerScript m_audioComponent;
 
-	private void Start()
+	private void Awake()
 	{
 		m_rigidbody = GetComponent<Rigidbody2D>();
+        m_audioComponent = GetComponent<AudioPlayerScript>();
 		if (m_hitParticlesObject) SetHitParicles(m_hitParticlesObject);
 	}
 
@@ -23,6 +26,8 @@ public class CollisionDamage : MonoBehaviour
 		if (collision == null) return;
 
 		if(collision.GetComponent<IDamageable>() == null) return;
+
+		if (!m_attacking) return;
 
 		Rigidbody2D rigidbody2D = collision.GetComponent<Rigidbody2D>();
 		IDamageable damageable = collision.GetComponent<IDamageable>();
@@ -35,13 +40,16 @@ public class CollisionDamage : MonoBehaviour
 
 		//Debug.Log(force);
 
-		if (m_hitParticlesObject && m_attacking)
+		if (m_hitParticlesObject)
 		{
 			m_hitParticles.transform.position = transform.position;
 			m_hitParticles.Play();
 		}
 
-		if (controller)
+		if (m_hitAudioClip) m_audioComponent.PlayAudio(m_hitAudioClip);
+
+
+        if (controller)
 		{
 			controller.SetEnemyState(EnemyStates.Stunned);
 		}
@@ -67,6 +75,11 @@ public class CollisionDamage : MonoBehaviour
 	public void SetHitParicles(GameObject hitParticles)
 	{
 		m_hitParticles = Instantiate(hitParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
+	}
+
+	public void setHitAudio(AudioClip hitAudio)
+	{
+		m_hitAudioClip = hitAudio;
 	}
 
 	public void SetAttacking(bool attacking)

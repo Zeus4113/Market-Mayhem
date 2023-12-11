@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class Throwable : MonoBehaviour
 {
     [SerializeField] private WeaponScriptableObject weaponData;
+    [SerializeField] private AudioClip m_punchWoosh;
 
 
     private Rigidbody2D m_playerHand;
@@ -32,6 +33,7 @@ public class Throwable : MonoBehaviour
     private CollisionDamage m_collisionDamage;
     private ShootingComponent m_shootingComponent;
     private ThrowableExplosion m_throwableExplosion;
+    private AudioPlayerScript m_audioComponent;
 
     private void Awake()
     {
@@ -40,6 +42,7 @@ public class Throwable : MonoBehaviour
         m_shootingComponent = GetComponent<ShootingComponent>();
         m_throwableExplosion = GetComponent<ThrowableExplosion>();
         m_RB = GetComponent<Rigidbody2D>();
+        m_audioComponent = GetComponent<AudioPlayerScript>();
     }
     public void Init(WeaponScriptableObject myWeaponData)
     {
@@ -60,11 +63,13 @@ public class Throwable : MonoBehaviour
         m_breakParticles = Instantiate(weaponData.m_breakParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
 
         m_collisionDamage.SetDamageStats(weaponData.m_damage, weaponData.m_knockback);
+        m_collisionDamage.setHitAudio(weaponData.m_hitAudio);
 
         switch (m_explodeOnThrow)
         {
             case true:
                 m_throwableExplosion.SetParticles(weaponData.m_explodeParticles);
+                m_throwableExplosion.SetAudio(weaponData.m_hitAudio);
                 break;
             case false:
                 m_throwableExplosion.enabled = false;
@@ -85,6 +90,8 @@ public class Throwable : MonoBehaviour
 
     public void SetAttached(PlayerInput playerInputComponent, string HandSide)
     {
+        this.gameObject.layer = LayerMask.NameToLayer("Weapon");
+
         m_playerInput = playerInputComponent;
         m_handSide = HandSide.ToLower();
         m_spriteRenderer.sprite = weaponData.m_spriteEquipped;
@@ -144,6 +151,7 @@ public class Throwable : MonoBehaviour
             m_throwableExplosion.SetCanExplode(true);
         }
         if (m_ranged) m_playerHand.GetComponent<PlayerActions>().BindEvents(true);
+        StartCoroutine(LifeSpan());
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -203,6 +211,7 @@ public class Throwable : MonoBehaviour
         OnDropped();
         //this.transform.parent = null;
         this.GetComponent<Rigidbody2D>().AddForce(m_playerHand.GetComponent<PlayerActions>().GetPlayerController().transform.up * 10, ForceMode2D.Impulse);
+        m_audioComponent.PlayAudio(m_punchWoosh);
         switch (m_handSide.ToLower())
         {
             case "left":
@@ -237,5 +246,18 @@ public class Throwable : MonoBehaviour
             m_spriteRenderer.sprite = m_spriteDamaged;
             PlayBreakParticles();
         }
+    }
+
+    private IEnumerator DisableCollision()
+    {
+        yield return new WaitForSeconds(3);
+        this.gameObject.layer = LayerMask.NameToLayer("IgnoreAll");
+    }
+
+    private IEnumerator LifeSpan()
+    {
+        StartCoroutine(DisableCollision());
+        yield return new WaitForSeconds(30);
+        Destroy(this.gameObject);
     }
 }

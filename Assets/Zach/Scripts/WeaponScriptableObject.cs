@@ -13,6 +13,7 @@ public class WeaponScriptableObject : ScriptableObject
     public GameObject m_breakParticles;
     public GameObject m_explodeParticles;
     public GameObject m_hitParticles;
+    public AudioClip m_hitAudio;
 
     public int m_durability = 0;
     public float m_handleOffset = 0;

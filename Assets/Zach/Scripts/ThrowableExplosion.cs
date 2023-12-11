@@ -6,6 +6,12 @@ public class ThrowableExplosion : MonoBehaviour
 {
     private ParticleSystem m_explodeParticles;
     private bool m_canExplode = false;
+    private AudioSource m_audioSource;
+
+    private void Awake()
+    {
+        m_audioSource = GetComponent<AudioSource>();
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -13,6 +19,7 @@ public class ThrowableExplosion : MonoBehaviour
         {
             m_explodeParticles.transform.position = transform.position;
             m_explodeParticles.Play();
+            m_audioSource.Play();
             Destroy(this.gameObject);
         }     
     }
@@ -25,5 +32,10 @@ public class ThrowableExplosion : MonoBehaviour
     public void SetCanExplode(bool canExplode)
     {
         m_canExplode = canExplode;
+    }
+
+    public void SetAudio(AudioClip clip)
+    {
+        m_audioSource.clip = clip;
     }
 }

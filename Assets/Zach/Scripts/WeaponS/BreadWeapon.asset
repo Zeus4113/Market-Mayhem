@@ -19,6 +19,7 @@ MonoBehaviour:
   m_breakParticles: {fileID: 52453051734204284, guid: 1dab48389ec657d44a2ccf093a4e9847, type: 3}
   m_explodeParticles: {fileID: 0}
   m_hitParticles: {fileID: 2042980795568123917, guid: e7ccfc61d23be3345a2799f5a2025def, type: 3}
+  m_hitAudio: {fileID: 8300000, guid: a1a909979f519f648a7b05ae8e47304b, type: 3}
   m_durability: 1
   m_handleOffset: 0.35
   m_handleVertOffset: 0.1

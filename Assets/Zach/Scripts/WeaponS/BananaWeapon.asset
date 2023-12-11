@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d97b707419ff264aae085f55f08a592, type: 3}
-  m_Name: AppleWeapon
+  m_Name: BananaWeapon
   m_EditorClassIdentifier: 
-  m_spriteEquipped: {fileID: 21300000, guid: 82acffe8adbca834c839252afb27f46f, type: 3}
-  m_spriteUnequipped: {fileID: 21300000, guid: 82acffe8adbca834c839252afb27f46f, type: 3}
-  m_spriteDamaged: {fileID: 21300000, guid: 82acffe8adbca834c839252afb27f46f, type: 3}
-  m_spriteDestroyed: {fileID: 21300000, guid: 82acffe8adbca834c839252afb27f46f, type: 3}
+  m_spriteEquipped: {fileID: 21300000, guid: 783ac76b7300be041ba15983680965be, type: 3}
+  m_spriteUnequipped: {fileID: 21300000, guid: 783ac76b7300be041ba15983680965be, type: 3}
+  m_spriteDamaged: {fileID: 21300000, guid: 783ac76b7300be041ba15983680965be, type: 3}
+  m_spriteDestroyed: {fileID: 21300000, guid: 783ac76b7300be041ba15983680965be, type: 3}
   m_breakParticles: {fileID: 52453051734204284, guid: 1dab48389ec657d44a2ccf093a4e9847, type: 3}
-  m_explodeParticles: {fileID: 3788341901591719424, guid: f842679a723d9fb4cbc1867be5036ab4, type: 3}
+  m_explodeParticles: {fileID: 4675418637222970446, guid: 9653513b441c5394a8e2ee4d45e010f6, type: 3}
   m_hitParticles: {fileID: 0}
+  m_hitAudio: {fileID: 8300000, guid: f38b4a774268e6549bab066bcf1c0ba0, type: 3}
   m_durability: 0
   m_handleOffset: 0
-  m_handleVertOffset: 0.05
-  m_rotationOffset: 0
+  m_handleVertOffset: 0
+  m_rotationOffset: 20
   m_damage: 1
   m_knockback: 10
   m_explodeOnThrow: 1

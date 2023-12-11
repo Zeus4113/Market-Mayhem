@@ -12,6 +12,7 @@ public class PlayerActions : MonoBehaviour
 	[SerializeField] private Sprite m_emptyHandSprite;
 	[SerializeField] private Sprite m_holdingHandSprite;
 	[SerializeField] private GameObject m_punchAnimator;
+	[SerializeField] private AudioClip m_punchSwooshAudioClip;
 
     private PlayerController m_playerController;
 	private Rigidbody2D m_handRB;
@@ -39,6 +40,7 @@ public class PlayerActions : MonoBehaviour
 	private int m_handSideMultiplier;
 
 	private CollisionDamage m_damageComponent;
+	private AudioPlayerScript m_audioComponent;
 
 	private bool m_ranged = false;
 
@@ -49,7 +51,8 @@ public class PlayerActions : MonoBehaviour
 		m_punchAnimator.SetActive(false);
 		m_punchAnimRB = m_punchAnimator.GetComponent<Rigidbody2D>();
 		m_damageComponent = GetComponent<CollisionDamage>();
-	}
+        m_audioComponent = GetComponent<AudioPlayerScript>();
+    }
 
 	public void Init(PlayerInput inputComponent, Transform homeLocation, Transform swingPosition, PlayerController characterController, string handSide)
 	{
@@ -261,6 +264,7 @@ public class PlayerActions : MonoBehaviour
         }
         canAttack = false;
 		m_damageComponent.SetAttacking(true);
+		m_audioComponent.PlayAudio(m_punchSwooshAudioClip);
 
         yield return new WaitForSeconds(m_attackCooldown);
 
