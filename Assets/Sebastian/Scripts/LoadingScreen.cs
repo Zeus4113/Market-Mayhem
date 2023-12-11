@@ -30,28 +30,37 @@ public class LoadingScreen : MonoBehaviour
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("LoadingScreen");
 
-        while (!asyncLoad.isDone)
+        while (asyncLoad.progress < 0.9f)
         {
+            Debug.Log(asyncLoad.progress);
             yield return new WaitForFixedUpdate();
         }
 
+        Debug.Log("Is Done");
+
         float time = 0;
 
-        while (time < m_duration)
+        while (time < m_duration) 
         {
             time += Time.fixedDeltaTime;
+            Debug.Log(time);
             m_loadingScreenImage.transform.position = Vector2.Lerp(m_startPosition, m_endPosition, time / m_duration);
             yield return new WaitForFixedUpdate();
 
         }
 
-        for (int i = 0; i < SceneManager.sceneCount; i++)
+        Debug.Log("Hit me daddy");
+
+        for (int i = 0; i < SceneManager.sceneCount; i++) 
         {
+            Debug.Log("FirstLoop");
             Scene myScene = SceneManager.GetSceneAt(i);
             if (myScene.name != "LoadingScreen") UnloadLevels(myScene);
         }
 
-        for(int i = 0; i < desiredLevels.Length; i++)
+        Debug.Log("Ive been spanked");
+
+        for (int i = 0; i < desiredLevels.Length; i++) 
         {
             LoadLevels(desiredLevels[i]);
         }
@@ -66,8 +75,9 @@ public class LoadingScreen : MonoBehaviour
         SceneManager.UnloadSceneAsync(scene);
     }
 
-    private void LoadLevels(string scene)
+    private void LoadLevels(string scene) 
     {
+        
         SceneManager.LoadSceneAsync(scene);
     }
 }

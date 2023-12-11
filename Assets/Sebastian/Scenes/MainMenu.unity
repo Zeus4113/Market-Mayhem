@@ -921,6 +921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desiredLevels:
   - TestScene
+  - MainLevel
 --- !u!114 &495400046
 MonoBehaviour:
   m_ObjectHideFlags: 0
