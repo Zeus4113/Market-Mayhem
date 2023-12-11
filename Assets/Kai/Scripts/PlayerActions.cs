@@ -38,12 +38,15 @@ public class PlayerActions : MonoBehaviour
 
 	private int m_handSideMultiplier;
 
+	private CollisionDamage m_damageComponent;
+
 	private void Awake()
 	{
 		m_handRB = this.GetComponent<Rigidbody2D>();
 		m_punchAnimator = Instantiate(m_punchAnimator, transform.position, transform.rotation);
 		m_punchAnimator.SetActive(false);
 		m_punchAnimRB = m_punchAnimator.GetComponent<Rigidbody2D>();
+		m_damageComponent = GetComponent<CollisionDamage>();
 	}
 
 	public void Init(PlayerInput inputComponent, Transform homeLocation, Transform swingPosition, PlayerController characterController, string handSide)
@@ -232,18 +235,18 @@ public class PlayerActions : MonoBehaviour
 		{
 			case true:       
                 this.transform.position = m_savedSwingTransform.position;
-                m_handRB.angularDrag = 15;
+                m_handRB.angularDrag = 10;
 				switch (m_handSide.ToLower())
 				{
 					case "left":
                         this.transform.rotation *= Quaternion.Euler(m_playerController.transform.forward * 90 * m_handSideMultiplier);
-                        m_handRB.AddForce((m_playerController.transform.up + m_playerController.transform.right/2) * m_punchForce, ForceMode2D.Impulse);
-                        m_handRB.AddTorque(-2500f);
+                        m_handRB.AddForce((m_playerController.transform.up + m_playerController.transform.right/3) * m_punchForce, ForceMode2D.Impulse);
+                        m_handRB.AddTorque(-1000f);
                         break;
 					case "right":
                         this.transform.rotation *= Quaternion.Euler(m_playerController.transform.forward * 90 * m_handSideMultiplier);
-                        m_handRB.AddForce((m_playerController.transform.up - m_playerController.transform.right/2) * m_punchForce, ForceMode2D.Impulse);
-                        m_handRB.AddTorque(2500f);
+                        m_handRB.AddForce((m_playerController.transform.up - m_playerController.transform.right/3) * m_punchForce, ForceMode2D.Impulse);
+                        m_handRB.AddTorque(1000f);
                         break;
 				}            
 				HeldItem.GetComponent<Throwable>().EditDurability(-1);
@@ -268,7 +271,7 @@ public class PlayerActions : MonoBehaviour
 		m_punchAnimRB.AddForce(transform.up * m_punchForce, ForceMode2D.Impulse);
 
         m_punchAnimator.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
 
         m_punchAnimator.SetActive(false);
     }
@@ -283,10 +286,12 @@ public class PlayerActions : MonoBehaviour
 			case true:
 				GetComponent<SpriteRenderer>().sprite = m_holdingHandSprite;
 				m_handHomeTransform = m_savedSwingTransform;
+				m_damageComponent.enabled = false;
 				break;
 			case false:
 				GetComponent<SpriteRenderer>().sprite = m_emptyHandSprite;
                 m_handHomeTransform = m_savedHandHomeTransform;
+                m_damageComponent.enabled = true;
                 break;
 		}
 	}

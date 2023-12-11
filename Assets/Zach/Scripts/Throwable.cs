@@ -22,13 +22,18 @@ public class Throwable : MonoBehaviour
     private Sprite m_spriteDestroyed;
     private int m_maxDurability;
     private ParticleSystem m_breakParticles;
+    private bool m_explodeOnThrow;
+    private Rigidbody2D m_RB;
 
 
     private SpriteRenderer m_spriteRenderer;
+    private CollisionDamage m_collisionDamage;
 
     private void Awake()
     {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
+        m_collisionDamage = GetComponent<CollisionDamage>();
+        m_RB = GetComponent<Rigidbody2D>();
     }
     public void Init(WeaponScriptableObject myWeaponData)
     {
@@ -42,8 +47,22 @@ public class Throwable : MonoBehaviour
 
         m_spriteDamaged = weaponData.m_spriteDamaged;
         m_spriteDestroyed = weaponData.m_spriteDestroyed;
+        m_explodeOnThrow = weaponData.m_explodeOnThrow;
 
-        m_breakParticles = Instantiate(myWeaponData.m_breakParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
+        m_breakParticles = Instantiate(weaponData.m_breakParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
+
+        m_collisionDamage.SetDamageStats(weaponData.m_damage, weaponData.m_knockback);
+
+        switch (m_explodeOnThrow)
+        {
+            case true:
+                GetComponent<ThrowableExplosion>().SetParticles(weaponData.m_explodeParticles);
+                break;
+            case false:
+                GetComponent<ThrowableExplosion>().enabled = false;
+                m_collisionDamage.SetHitParicles(weaponData.m_hitParticles);
+                break;
+        }
     }
 
     public void SetAttached(PlayerInput playerInputComponent, string HandSide)
@@ -58,6 +77,7 @@ public class Throwable : MonoBehaviour
     {
         m_spriteRenderer.sprite = m_spriteDestroyed;
         m_canPickUp = false;
+        m_collisionDamage.SetRB(m_RB);
         switch (m_handSide)
         {
             case "left":
@@ -93,6 +113,10 @@ public class Throwable : MonoBehaviour
                 m_playerHand.GetComponent<PlayerActions>().BindEvents(true);
                 break;
         }
+        if (m_explodeOnThrow)
+        {
+            GetComponent<ThrowableExplosion>().SetCanExplode(true);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -106,6 +130,7 @@ public class Throwable : MonoBehaviour
         if (collision.GetComponent<PlayerActions>().GetHolding() || !m_canPickUp || m_pickedUp) return;
 
         m_playerHand = collision.GetComponent<Rigidbody2D>();
+        m_collisionDamage.SetRB(m_playerHand.GetComponent<Rigidbody2D>());
 
         if (m_canPickUp)
         {

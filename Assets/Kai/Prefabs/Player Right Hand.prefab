@@ -164,6 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_damageMultiplier: 2
   m_forceMultiplier: 25
+  m_hitParticlesObject: {fileID: 2042980795568123917, guid: e7ccfc61d23be3345a2799f5a2025def, type: 3}
 --- !u!114 &6085304768947682089
 MonoBehaviour:
   m_ObjectHideFlags: 0

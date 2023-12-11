@@ -17,10 +17,13 @@ MonoBehaviour:
   m_spriteDamaged: {fileID: 21300000, guid: 568cb1145db1e704eb8939c87a8f8757, type: 3}
   m_spriteDestroyed: {fileID: 21300000, guid: d1a01856dd65c814f8b08c61c6f4b35e, type: 3}
   m_breakParticles: {fileID: 52453051734204284, guid: 1dab48389ec657d44a2ccf093a4e9847, type: 3}
+  m_explodeParticles: {fileID: 0}
+  m_hitParticles: {fileID: 5659918374015372325, guid: c64480e6b0055c94c910c4081df838a4, type: 3}
   m_durability: 5
   m_handleOffset: 0.25
   m_rotationOffset: 270
-  m_damage: 0
-  m_knockback: 0
+  m_damage: 8
+  m_knockback: 50
+  m_explodeOnThrow: 0
   m_ranged: 0
   m_projectileSprite: {fileID: 0}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,10 +33,11 @@ public class WeaponSpawnScript : MonoBehaviour
     {
         while (true)
         {
-            randomInt = Random.Range(1, children.Length);
+            randomInt = UnityEngine.Random.Range(1, children.Length);
             spawnedWeapon = Instantiate(m_weaponPrefab, children[randomInt].position, children[randomInt].rotation);
-            weaponType = weaponTypes[Random.Range(0, weaponTypes.Length)];
-            spawnedWeapon.GetComponent<Throwable>().Init(weaponType);
+            weaponType = weaponTypes[UnityEngine.Random.Range(0, weaponTypes.Length)];
+            spawnedWeapon.GetComponent<Throwable>().Init(weaponType);        
+
             yield return new WaitForSeconds(5);
         }
     }
