@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-	[SerializeField] private Transform[] m_spawnLocations;
+	// Events
+	public delegate void EnemyManagerEvent(int count);
+	public event EnemyManagerEvent enemyCountChange;
 
-	[SerializeField] private int m_spawnCount;
-	[SerializeField] private GameObject m_enemyPrefab;
-
-	private Transform[] m_breakableLocations;
+	// Game Manager
+	private GameManager m_gameManager;
+	private Transform[] m_spawnPositons;
 
 	List<EnemyController> m_enemyList = new List<EnemyController>();
 
 	Coroutine C_SpawnEnemies;
 	bool C_IsSpawning = false;
 
-	public void Init(Transform[] breakableLocations)
-	{
-		m_breakableLocations = breakableLocations;
+	EnemyManagerSetupData enemySetupData;
 
-		if(m_breakableLocations.Length > 0)
-		{
-			StartSpawnEnemies();
-		}
+	public void Init(EnemyManagerSetupData myData, GameManager gm, Transform[] positions)
+	{
+		enemySetupData = myData;
+		m_gameManager = gm;
+		m_spawnPositons = positions;
 	}
 
-	void StartSpawnEnemies()
+	public void StartSpawnEnemies()
 	{
 		if (C_IsSpawning) return;
 
@@ -34,10 +34,10 @@ public class EnemyManager : MonoBehaviour
 
 		if (C_SpawnEnemies != null) return;
 
-		C_SpawnEnemies = StartCoroutine(SpawnEnemies(m_spawnCount));
+		C_SpawnEnemies = StartCoroutine(SpawnEnemies(enemySetupData.enemyCount));
 	}
 
-	void StopSpawnEnemies()
+	public void StopSpawnEnemies()
 	{
 		if (!C_IsSpawning) return;
 
@@ -55,65 +55,42 @@ public class EnemyManager : MonoBehaviour
 		{
 			for(int i = 0; i < amount; i++)
 			{
-				int index = Random.Range(0, m_spawnLocations.Length);
-
-				GameObject newEnemy = Instantiate(m_enemyPrefab, m_spawnLocations[index].position, m_spawnLocations[index].rotation);
-				EnemyController controller = newEnemy.GetComponent<EnemyController>();
-
-				AddEnemy(controller);
-				controller.Init(m_breakableLocations[Random.Range(0, m_breakableLocations.Length)], m_spawnLocations[index], this);
-
-				yield return new WaitForSeconds(0.1f);
+				SpawnNewEnemy();
+				yield return new WaitForSeconds(enemySetupData.enemySpawnDelay);
 			}
-
 			StopSpawnEnemies();
 		}
 	}
 
-	public Transform GetNewBreakable()
+	private void SpawnNewEnemy()
 	{
-		bool isRunning = true;
-		while (isRunning)
-		{
-			Transform newLocation = m_breakableLocations[Random.Range(0, m_breakableLocations.Length)];
+		int index = Random.Range(0, m_spawnPositons.Length);
 
-			if (newLocation.GetComponent<ItemStore>().CheckRemainingItems())
-			{
-				return m_breakableLocations[Random.Range(0, m_breakableLocations.Length)];
-			}
+		GameObject newEnemy = Instantiate(enemySetupData.enemyPrefab, m_spawnPositons[index].position, m_spawnPositons[index].rotation);
+		EnemyController controller = newEnemy.GetComponent<EnemyController>();
 
-			int count = 0;
-
-			for (int i = 0; i < m_breakableLocations.Length; i++)
-			{
-				Debug.Log(count);
-
-				if (!m_breakableLocations[i].GetComponent<ItemStore>().CheckRemainingItems())
-				{
-					count++;
-				}
-
-				if(count == m_breakableLocations.Length - 1)
-				{
-					isRunning = false;
-				}
-			}
-		}
-
-		return null;
+		AddEnemy(controller);
+		controller.Init(m_spawnPositons[index], this);
 	}
 
 	public void AddEnemy(EnemyController controller)
 	{
 		m_enemyList.Add(controller);
+		enemyCountChange?.Invoke(m_enemyList.Count);
 	}
 
 	public void RemoveEnemy(EnemyController controller)
 	{
 		m_enemyList.Remove(controller);
+		enemyCountChange?.Invoke(m_enemyList.Count);
 
 		GameObject enemy = controller.gameObject;
 		Destroy(enemy);
 
+	}
+
+	public GameManager GetGameManager()
+	{
+		return m_gameManager;
 	}
 }

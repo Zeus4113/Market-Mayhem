@@ -8,7 +8,7 @@ public class ItemStore : MonoBehaviour
 
 	private Transform[] m_itemSpawnTransforms;
 
-	List<GameObject> m_items = new List<GameObject>();
+	List<Item> m_items = new List<Item>();
 
 	public void Init()
 	{
@@ -22,7 +22,7 @@ public class ItemStore : MonoBehaviour
 
 		for(int i = 0;  i < m_itemSpawnTransforms.Length; i++)
 		{
-			m_items.Add(Instantiate(m_itemPrefab, m_itemSpawnTransforms[i].position, Quaternion.Euler(0, 0, Random.Range(0, 360))));
+			m_items.Add(Instantiate(m_itemPrefab.GetComponent<Item>(), m_itemSpawnTransforms[i].position, Quaternion.Euler(0, 0, Random.Range(0, 360))));
 		}
 	}
 
@@ -54,7 +54,7 @@ public class ItemStore : MonoBehaviour
 		return m_items.Count;
 	}
 	
-	public List<GameObject> GetItems()
+	public List<Item> GetItems()
 	{
 		return m_items;
 	}

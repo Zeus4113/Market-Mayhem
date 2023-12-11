@@ -31,9 +31,9 @@ public class HealthComponent : MonoBehaviour, IDamageable
 
 		if (!IsAlive())
 		{
-			Debug.Log("Dead");
 			Instantiate(m_deadEnemy, transform.position, transform.rotation);
-			Destroy(this.gameObject);
+			EnemyController enemyController = GetComponent<EnemyController>();
+			enemyController.GetEnemyManager().RemoveEnemy(enemyController);
 		}
 	}
 

@@ -1,10 +1,12 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UserInterfaceManager : MonoBehaviour
 {
+	private GameManager m_gameManager;
+
 	private Canvas m_canvas;
 	private GameObject m_progressBar;
 	private GameObject m_gameOverImage;
@@ -12,19 +14,42 @@ public class UserInterfaceManager : MonoBehaviour
 	private GameObject m_calendar;
 	private GameObject m_peopleCounter;
 
-	public void Init(Camera mainCamera)
-	{
-		m_canvas = GetComponent<Canvas>();
+	private Slider m_progressBarSlider;
+	private TMPro.TextMeshProUGUI m_peopleCounterText;
 
-		m_canvas.worldCamera = mainCamera;
+	public void Init(Camera mainCamera, GameManager gm)
+	{
+		m_gameManager = gm;
+
+
+		m_canvas = GetComponent<Canvas>();
+		if (mainCamera != null)
+		{
+			m_canvas.worldCamera = mainCamera;
+		}
+
+		m_gameManager.GetScoreManager().updateProgressBar += SetProgressBar;
+		m_gameManager.GetEnemyManager().enemyCountChange += SetPeopleCount;
 
 		m_progressBar = this.transform.GetChild(0).gameObject;
 		m_gameOverImage = this.transform.GetChild(1).gameObject;
 		m_calendar = this.transform.GetChild(2).gameObject;
 		m_digitalClock = this.transform.GetChild(3).gameObject;
 		m_peopleCounter = this.transform.GetChild(4).gameObject;
-		Debug.Log(m_progressBar);
 
+		m_progressBarSlider = m_progressBar.GetComponentInChildren<Slider>();
+		m_peopleCounterText = m_peopleCounter.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+
+	}
+
+	private void SetProgressBar(float barPercentage)
+	{
+		m_progressBarSlider.value = barPercentage;
+	}
+
+	private void SetPeopleCount(int peopleCount)
+	{
+		m_peopleCounterText.text = peopleCount.ToString();
 	}
 
 	public void EnableGameOverWidget(bool isTrue)

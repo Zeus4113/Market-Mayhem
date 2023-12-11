@@ -17,27 +17,44 @@ public class EnemyController : MonoBehaviour
 
 	private EnemyManager m_manager;
 
-	private Transform m_targetBreakable;
-	private Transform m_targetDoor;
+	private Item m_targetItem;
+	private Transform m_spawnDoor;
 
-	private GameObject m_pickedItem;
+	private Item m_pickedItem;
 
 	private EnemyStates m_currentState;
 
 	private Rigidbody2D m_rigidbody;
 	private Collider2D m_collider;
 
-	public void Init(Transform targetBreakable, Transform targetItem, EnemyManager enemyManager)
+	public void Init(Transform spawnDoor, EnemyManager enemyManager)
 	{
-		m_targetBreakable = targetBreakable;
-		m_targetDoor = targetItem;
+		m_spawnDoor = spawnDoor;
 		m_manager = enemyManager;
-
 		m_rigidbody = GetComponent<Rigidbody2D>();
 		m_pickedItem = null;
 		m_currentState = EnemyStates.Searching;
 
+		m_targetItem = GetTargetItem();
 		StartStateMachine();
+	}
+
+	public Item GetTargetItem()
+	{
+		while (true)
+		{
+			Item newItem = m_manager.GetGameManager().GetScoreManager().GetRandomItem();
+
+			if (!newItem.IsPickedUp())
+			{
+				return newItem;
+			}
+		}
+	}
+
+	public EnemyManager GetEnemyManager()
+	{
+		return m_manager;
 	}
 
 	Coroutine C_StateMachine;
@@ -76,15 +93,15 @@ public class EnemyController : MonoBehaviour
 			{
 				case EnemyStates.Searching:
 
-					if (m_targetBreakable.GetComponent<ItemStore>().CheckRemainingItems())
+					if (!m_targetItem.IsPickedUp() && m_targetItem != null)
 					{
-						Move(m_targetBreakable);
+						Move(m_targetItem.transform);
 					}
 					else
 					{
-						m_targetBreakable = m_manager.GetNewBreakable();
+						m_targetItem = GetTargetItem(); ;
 
-						if(m_targetBreakable == null)
+						if(m_targetItem == null)
 						{
 							m_manager.RemoveEnemy(this);
 						}
@@ -94,7 +111,7 @@ public class EnemyController : MonoBehaviour
 
 				case EnemyStates.Fleeing:
 
-					Move(m_targetDoor);
+					Move(m_spawnDoor);
 
 					break;
 
@@ -131,7 +148,7 @@ public class EnemyController : MonoBehaviour
 		transform.up = direction;
 	}
 
-	public void AddItem(GameObject item)
+	public void AddItem(Item item)
 	{
 		m_pickedItem = item;
 		m_pickedItem.transform.parent = transform;
@@ -142,11 +159,10 @@ public class EnemyController : MonoBehaviour
 	public void RemoveItem()
 	{
 		Destroy(m_pickedItem);
-
 		SetEnemyState(EnemyStates.Searching);
 	}
 
-	public GameObject GetPickedItem()
+	public Item GetPickedItem()
 	{
 		return m_pickedItem;
 	}
