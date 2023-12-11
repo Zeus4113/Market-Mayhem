@@ -22,5 +22,5 @@ public class WeaponScriptableObject : ScriptableObject
     public bool m_explodeOnThrow = false;
 
     public bool m_ranged = false;
-    public Sprite m_projectileSprite;
+    public GameObject m_projectilePrefab;
 }

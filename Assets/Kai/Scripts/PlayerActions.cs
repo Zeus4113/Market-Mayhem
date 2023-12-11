@@ -40,6 +40,8 @@ public class PlayerActions : MonoBehaviour
 
 	private CollisionDamage m_damageComponent;
 
+	private bool m_ranged = false;
+
 	private void Awake()
 	{
 		m_handRB = this.GetComponent<Rigidbody2D>();
@@ -164,7 +166,7 @@ public class PlayerActions : MonoBehaviour
 			if (Vector2.Distance(this.transform.position, m_handHomeTransform.position) < 0.5f)
 			{
                 this.transform.rotation = m_playerController.transform.rotation;
-                switch (IsHolding)
+                switch (IsHolding && !m_ranged)
 				{
 					case true:
                         this.transform.rotation *= Quaternion.Euler(m_playerController.transform.forward * 90 * m_handSideMultiplier);
@@ -276,12 +278,13 @@ public class PlayerActions : MonoBehaviour
         m_punchAnimator.SetActive(false);
     }
 
-	public void SetHolding(bool HoldingBool, GameObject Item)
+	public void SetHolding(bool HoldingBool, GameObject Item, bool ranged)
 	{
 		IsHolding = HoldingBool;
 		HeldItem = Item;
+		m_ranged = ranged;
 
-		switch (IsHolding)
+		switch (IsHolding && !m_ranged)
 		{
 			case true:
 				GetComponent<SpriteRenderer>().sprite = m_holdingHandSprite;

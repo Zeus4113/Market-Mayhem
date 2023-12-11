@@ -24,15 +24,20 @@ public class Throwable : MonoBehaviour
     private ParticleSystem m_breakParticles;
     private bool m_explodeOnThrow;
     private Rigidbody2D m_RB;
+    private bool m_ranged;
 
 
     private SpriteRenderer m_spriteRenderer;
     private CollisionDamage m_collisionDamage;
+    private ShootingComponent m_shootingComponent;
+    private ThrowableExplosion m_throwableExplosion;
 
     private void Awake()
     {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_collisionDamage = GetComponent<CollisionDamage>();
+        m_shootingComponent = GetComponent<ShootingComponent>();
+        m_throwableExplosion = GetComponent<ThrowableExplosion>();
         m_RB = GetComponent<Rigidbody2D>();
     }
     public void Init(WeaponScriptableObject myWeaponData)
@@ -48,6 +53,7 @@ public class Throwable : MonoBehaviour
         m_spriteDamaged = weaponData.m_spriteDamaged;
         m_spriteDestroyed = weaponData.m_spriteDestroyed;
         m_explodeOnThrow = weaponData.m_explodeOnThrow;
+        m_ranged = weaponData.m_ranged;
 
         m_breakParticles = Instantiate(weaponData.m_breakParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
 
@@ -56,11 +62,21 @@ public class Throwable : MonoBehaviour
         switch (m_explodeOnThrow)
         {
             case true:
-                GetComponent<ThrowableExplosion>().SetParticles(weaponData.m_explodeParticles);
+                m_throwableExplosion.SetParticles(weaponData.m_explodeParticles);
                 break;
             case false:
-                GetComponent<ThrowableExplosion>().enabled = false;
+                m_throwableExplosion.enabled = false;
                 m_collisionDamage.SetHitParicles(weaponData.m_hitParticles);
+                break;
+        }
+
+        switch (m_ranged)
+        {
+            case true:
+                m_shootingComponent.SetProjectile(weaponData.m_projectilePrefab);
+                break;
+            case false:
+                m_shootingComponent.enabled = false;
                 break;
         }
     }
@@ -71,6 +87,13 @@ public class Throwable : MonoBehaviour
         m_handSide = HandSide.ToLower();
         m_spriteRenderer.sprite = weaponData.m_spriteEquipped;
         if (m_durability <= 0) WeaponDestroyed();
+
+        if (m_ranged)
+        {
+            m_shootingComponent.BindEvents(true, m_playerInput, m_handSide); 
+            m_playerHand.GetComponent<PlayerActions>().BindEvents(false);
+            m_shootingComponent.SetPlayerHand(m_playerHand);
+        }
     }
 
     private void WeaponDestroyed()
@@ -90,6 +113,7 @@ public class Throwable : MonoBehaviour
                 m_playerHand.GetComponent<PlayerActions>().BindEvents(false);
                 break;
         }
+        if(m_ranged) m_shootingComponent.BindEvents(false, m_playerInput, m_handSide);
     }
 
     private void PlayBreakParticles()
@@ -115,8 +139,9 @@ public class Throwable : MonoBehaviour
         }
         if (m_explodeOnThrow)
         {
-            GetComponent<ThrowableExplosion>().SetCanExplode(true);
+            m_throwableExplosion.SetCanExplode(true);
         }
+        if (m_ranged) m_playerInput.GetComponent<PlayerActions>().BindEvents(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -138,7 +163,7 @@ public class Throwable : MonoBehaviour
         }
 
         if (m_canPickUp) m_pickedUp = true;
-        collision.GetComponent<PlayerActions>().SetHolding(true, this.gameObject);
+        collision.GetComponent<PlayerActions>().SetHolding(true, this.gameObject, m_ranged);
         m_pickedUp = true;
     }
 
@@ -186,7 +211,7 @@ public class Throwable : MonoBehaviour
         }
 
 
-        m_playerHand.GetComponent<PlayerActions>().SetHolding(false, null);
+        m_playerHand.GetComponent<PlayerActions>().SetHolding(false, null, m_ranged);
         StartCoroutine(DelayPickup());
     }
 
