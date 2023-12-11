@@ -724,6 +724,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manager Group
       objectReference: {fileID: 0}
+    - target: {fileID: 1553411692215205946, guid: ef41439428633794f8324da5d72ac5e3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1705686458510042431, guid: ef41439428633794f8324da5d72ac5e3, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -844,6 +848,10 @@ PrefabInstance:
     - target: {fileID: 5083124363827006130, guid: 260b1648a2c3483419dfa061335c4306, type: 3}
       propertyPath: m_Name
       value: Grid
+      objectReference: {fileID: 0}
+    - target: {fileID: 5083124363827006130, guid: 260b1648a2c3483419dfa061335c4306, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -7,77 +7,53 @@ using UnityEngine.SceneManagement;
 
 public class LoadingScreen : MonoBehaviour
 {
-    [SerializeField] private string[] desiredLevels;
+    [SerializeField] private string desiredLevel;
 
-    private Vector2 m_startPosition;
-    private Vector2 m_endPosition;
+	private Scene m_loadingScreenScene;
 
-    private Image m_loadingScreenImage;
-    private float m_loadingScreenSpeed;
-    private Vector2 m_loadingScreenPositon;
-    private float m_duration = 5f;
+	public void StartLoad()
+	{
+		StartCoroutine(Loading());
+	}
 
-
-    public void LoadLevelScreen()
+    private IEnumerator Loading()
     {
-        StartCoroutine(DrawLoadingScreen(desiredLevels));
-    }
+		ToggleLoadingScreen();
 
+		yield return new WaitForSeconds(1f);
 
+		Debug.Log("Wait Over 1");
+		LoadDesiredLevel();
 
+		yield return new WaitForSeconds(1f);
 
-    private IEnumerator DrawLoadingScreen(string[] desiredLevels)
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("LoadingScreen");
+		Debug.Log("Wait Over 2");
+		UnloadAllLevels();
 
-        while (asyncLoad.progress < 0.9f)
-        {
-            Debug.Log(asyncLoad.progress);
-            yield return new WaitForFixedUpdate();
-        }
-
-        Debug.Log("Is Done");
-
-        float time = 0;
-
-        while (time < m_duration) 
-        {
-            time += Time.fixedDeltaTime;
-            Debug.Log(time);
-            m_loadingScreenImage.transform.position = Vector2.Lerp(m_startPosition, m_endPosition, time / m_duration);
-            yield return new WaitForFixedUpdate();
-
-        }
-
-        Debug.Log("Hit me daddy");
-
-        for (int i = 0; i < SceneManager.sceneCount; i++) 
-        {
-            Debug.Log("FirstLoop");
-            Scene myScene = SceneManager.GetSceneAt(i);
-            if (myScene.name != "LoadingScreen") UnloadLevels(myScene);
-        }
-
-        Debug.Log("Ive been spanked");
-
-        for (int i = 0; i < desiredLevels.Length; i++) 
-        {
-            LoadLevels(desiredLevels[i]);
-        }
-
-        Scene loadingScene = SceneManager.GetSceneByName("LoadingScreen");
-        UnloadLevels(loadingScene);
+		yield return null;
 
     }
 
-    private void UnloadLevels(Scene scene)
-    {
-        SceneManager.UnloadSceneAsync(scene);
-    }
+	private void ToggleLoadingScreen()
+	{
+		if (!SceneManager.GetSceneByName("LoadingScreen").isLoaded)
+		{
+			SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+		}
+	}
 
-    private void LoadLevels(string scene) 
-    {
-        
-        SceneManager.LoadSceneAsync(scene);
-    }
+	private void UnloadAllLevels ()
+	{
+		for (int i = 0; i < SceneManager.sceneCount; i++)
+		{
+			Scene myScene = SceneManager.GetSceneAt(i);
+
+			if (myScene.name != "LoadingScreen" && myScene.name != desiredLevel) SceneManager.UnloadSceneAsync(myScene);
+		}
+	}
+
+	private void LoadDesiredLevel()
+	{
+		SceneManager.LoadSceneAsync(desiredLevel, LoadSceneMode.Additive);
+	}
 }

@@ -45,7 +45,7 @@ public class EnemyController : MonoBehaviour
 		List<Item> currentItems = m_manager.GetGameManager().GetScoreManager().GetItemList();
 
 		int validItems = currentItems.Count;
-		Debug.Log(validItems);
+		//Debug.Log(validItems);
 
 		while (true)
 		{
@@ -58,7 +58,7 @@ public class EnemyController : MonoBehaviour
 			else if(newItem.IsPickedUp())
 			{
 				validItems--;
-				Debug.Log(validItems);
+				//Debug.Log(validItems);
 				if (validItems == 0) break;
 			}
 		}

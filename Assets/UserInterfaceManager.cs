@@ -40,16 +40,29 @@ public class UserInterfaceManager : MonoBehaviour
 		m_progressBarSlider = m_progressBar.GetComponentInChildren<Slider>();
 		m_peopleCounterText = m_peopleCounter.GetComponentInChildren<TMPro.TextMeshProUGUI>();
 
+		m_progressBar.SetActive(false);
+		m_calendar.SetActive(true);
+		m_digitalClock.SetActive(false);
+		m_peopleCounter.SetActive(false);
+
+	}
+
+	public void StartGame()
+	{
+		m_progressBar.SetActive(true);
+		m_calendar.SetActive(true);
+		m_digitalClock.SetActive(true);
+		m_peopleCounter.SetActive(true);
 	}
 
 	private void SetProgressBar(float barPercentage)
 	{
-		m_progressBarSlider.value = barPercentage;
+		if(m_progressBar != null && m_progressBar.activeSelf && m_progressBarSlider != null) { m_progressBarSlider.value = barPercentage; }
 	}
 
 	private void SetPeopleCount(int peopleCount)
 	{
-		m_peopleCounterText.text = peopleCount.ToString();
+		if (m_peopleCounter != null && m_peopleCounter.activeSelf && m_peopleCounterText != null) { m_peopleCounterText.text = peopleCount.ToString(); }
 	}
 
 	public void EnableGameOverWidget(bool isTrue)

@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
 	[Header("Transform Holder")]
 	[SerializeField] Transform m_transformHolder;
 
+	[Header("Start Trigger")]
+	[SerializeField] Transform m_startTrigger;
+
 	// Transforms
 	Transform[] m_breakableTransforms;
 	Transform[] m_enemySpawnTransforms;
@@ -58,9 +61,12 @@ public class GameManager : MonoBehaviour
 	private EnemyManagerSetupData enemyManagerSetupData;
 	private PlayerData playerSetupData;
 
-	void Start()
+
+
+	private void Start()
 	{
 		Init(m_LevelDataScriptableObject);
+		m_startTrigger.GetComponent<StartGameTrigger>().onStart += StartGame;
 	}
 
 	public void Init(LevelDataScriptableObject inputData)
@@ -94,7 +100,7 @@ public class GameManager : MonoBehaviour
 		SetupUIManager();
 		SetupScoreManager();
 		SetupEnemyManager();
-		StartGame();
+		m_scoreManager.SetupBreakables();
 	}
 
 	void GetManagerReferences()
@@ -165,9 +171,9 @@ public class GameManager : MonoBehaviour
 	
 	}
 
-	void StartGame()
+	public void StartGame()
 	{
-		m_scoreManager.SetupBreakables();
+		m_UIManager.StartGame();
 		m_enemyManager.StartSpawnEnemies();
 	}
 

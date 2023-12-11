@@ -22,20 +22,24 @@ public class HealthComponent : MonoBehaviour, IDamageable
 	{
 		m_currentHealth -= damage;
 
-		if(m_currentHealth < 0)
+		if (m_currentHealth < 0)
 		{
 			m_currentHealth = 0;
 		}
 
-		Debug.Log(gameObject + m_currentHealth.ToString());
-
 		if (!IsAlive())
 		{
-			Instantiate(m_deadEnemy, transform.position, transform.rotation);
-			EnemyController enemyController = GetComponent<EnemyController>();
+			if(m_deadEnemy != null)
+			{
+				Instantiate(m_deadEnemy, transform.position, transform.rotation);
+			}
 
-			enemyController.DropItem();
-			enemyController.GetEnemyManager().RemoveEnemy(enemyController);
+			if (GetComponent<EnemyController>())
+			{
+				EnemyController enemyController = GetComponent<EnemyController>();
+				enemyController.DropItem();
+				enemyController.GetEnemyManager().RemoveEnemy(enemyController);
+			}
 		}
 	}
 

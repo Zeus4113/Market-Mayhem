@@ -122,9 +122,6 @@ public class ScoreManager : MonoBehaviour
 
 	private float CalculateBarPercentage()
 	{
-		Debug.Log("Number of Items: " + m_numberOfItems);
-		Debug.Log("Total Items: " + m_totalItems);
-
 		float barPercentage = 1.0f * m_numberOfItems / m_totalItems;
 
 		if (barPercentage <= 0f)

@@ -17,7 +17,7 @@ public class EnemyManager : MonoBehaviour
 	Coroutine C_SpawnEnemies;
 	bool C_IsSpawning = false;
 
-	EnemyManagerSetupData enemySetupData;
+	private EnemyManagerSetupData enemySetupData;
 
 	public void Init(EnemyManagerSetupData myData, GameManager gm, Transform[] positions)
 	{
@@ -55,6 +55,8 @@ public class EnemyManager : MonoBehaviour
 		{
 			for(int i = 0; i < amount; i++)
 			{
+				Debug.Log(i);
+				Debug.Log(amount);
 				SpawnNewEnemy();
 				yield return new WaitForSeconds(enemySetupData.enemySpawnDelay);
 			}

@@ -27,12 +27,12 @@ public class CollisionDamage : MonoBehaviour
 		IDamageable damageable = collision.GetComponent<IDamageable>();
 		EnemyController controller = collision.GetComponent<EnemyController>();
 
-		Debug.Log("Damage: " + m_rigidbody.velocity.magnitude * m_damageMultiplier);
+		//Debug.Log("Damage: " + m_rigidbody.velocity.magnitude * m_damageMultiplier);
 		damageable.Damage(m_rigidbody.velocity.magnitude * m_damageMultiplier);
 
 		Vector2 force = new Vector2(m_rigidbody.velocity.x * m_forceMultiplier, m_rigidbody.velocity.y * m_forceMultiplier);
 
-		Debug.Log(force);
+		//Debug.Log(force);
 
 		if (m_hitParticlesObject)
 		{
@@ -40,8 +40,15 @@ public class CollisionDamage : MonoBehaviour
 			m_hitParticles.Play();
 		}
 
-		controller.SetEnemyState(EnemyStates.Stunned);
-		rigidbody2D.AddForce(force, ForceMode2D.Impulse);
+		if (controller)
+		{
+			controller.SetEnemyState(EnemyStates.Stunned);
+		}
+
+		if(rigidbody2D)
+		{
+			rigidbody2D.AddForce(force, ForceMode2D.Impulse);
+		}
 
 	}
 
