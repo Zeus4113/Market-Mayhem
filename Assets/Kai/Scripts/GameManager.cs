@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+// Data Seperation Structs
 public struct EnemyManagerSetupData
 {
 	public GameObject enemyPrefab;
@@ -29,20 +31,21 @@ public class GameManager : MonoBehaviour
 
 	// References
 	[Header("Manager References")]
-	[SerializeField] private ScoreManager m_scoreManager;
-	[SerializeField] private UserInterfaceManager m_UIManager;
-	[SerializeField] private EnemyManager m_enemyManager;
+	private ScoreManager m_scoreManager;
+	private UserInterfaceManager m_UIManager;
+	private EnemyManager m_enemyManager;
 	[Space(2)]
 
 	[Header("Level Data")]
 	[SerializeField] LevelDataScriptableObject m_LevelDataScriptableObject;
 
+	[Header("Transform Holder")]
+	[SerializeField] Transform m_transformHolder;
+
 	// Transforms
 	Transform[] m_breakableTransforms;
 	Transform[] m_enemySpawnTransforms;
 	Transform m_playerSpawnTransform;
-
-	private Transform m_transformHolder;
  
 	// Player Components
 	private PlayerController m_playerController;
@@ -62,9 +65,12 @@ public class GameManager : MonoBehaviour
 
 	public void Init(LevelDataScriptableObject inputData)
 	{
-		levelData = inputData;
-		m_transformHolder = transform.GetChild(0);
+		// Gather Data
+		levelData = inputData;;
 		GetTransformData();
+		GetManagerReferences();
+
+		// Seperate data into structs to pass into manager classes
 
 		// Score Data
 		scoreManagerSetupData.breakablePrefab = inputData.m_breakablePrefab;
@@ -88,12 +94,20 @@ public class GameManager : MonoBehaviour
 		SetupUIManager();
 		SetupScoreManager();
 		SetupEnemyManager();
-
 		StartGame();
+	}
+
+	void GetManagerReferences()
+	{
+		m_scoreManager = transform.Find("Score Manager").GetComponent<ScoreManager>();
+		m_enemyManager = transform.Find("Enemy Manager").GetComponent<EnemyManager>();
+		m_UIManager = transform.Find("UI Manager").GetComponent<UserInterfaceManager>();
 	}
 
 	void GetTransformData()
 	{
+		if (m_transformHolder == null) return;
+
 		// Player Transform Data
 		m_playerSpawnTransform = m_transformHolder.GetChild(0);
 

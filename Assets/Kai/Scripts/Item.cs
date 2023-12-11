@@ -39,4 +39,20 @@ public class Item : MonoBehaviour
 	{
 		m_isPickedUp = isTrue;
 	}
-}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if(collision == null) return;
+
+		if(collision.GetComponent<EnemyController>() == null) return;
+
+		EnemyController enemyController = collision.GetComponent<EnemyController>();
+
+		if(enemyController.GetPickedItem() != null) return;
+
+		enemyController.AddItem(this);
+	}
+
+}	
+
+

@@ -80,6 +80,8 @@ public class ScoreManager : MonoBehaviour
 		return m_itemList[Random.Range(0, m_itemList.Count-1)];
 	}
 
+	public List<Item> GetItemList() { return m_itemList; }
+
 	public void SetupBreakables()
 	{
 		m_numberOfItems = 0;

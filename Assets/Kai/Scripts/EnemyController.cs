@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public enum EnemyStates
@@ -41,6 +42,11 @@ public class EnemyController : MonoBehaviour
 
 	public Item GetTargetItem()
 	{
+		List<Item> currentItems = m_manager.GetGameManager().GetScoreManager().GetItemList();
+
+		int validItems = currentItems.Count;
+		Debug.Log(validItems);
+
 		while (true)
 		{
 			Item newItem = m_manager.GetGameManager().GetScoreManager().GetRandomItem();
@@ -49,7 +55,15 @@ public class EnemyController : MonoBehaviour
 			{
 				return newItem;
 			}
+			else if(newItem.IsPickedUp())
+			{
+				validItems--;
+				Debug.Log(validItems);
+				if (validItems == 0) break;
+			}
 		}
+
+		return null;
 	}
 
 	public EnemyManager GetEnemyManager()
@@ -93,7 +107,7 @@ public class EnemyController : MonoBehaviour
 			{
 				case EnemyStates.Searching:
 
-					if (!m_targetItem.IsPickedUp() && m_targetItem != null)
+					if (m_targetItem != null && !m_targetItem.IsPickedUp())
 					{
 						Move(m_targetItem.transform);
 					}
@@ -101,7 +115,7 @@ public class EnemyController : MonoBehaviour
 					{
 						m_targetItem = GetTargetItem(); ;
 
-						if(m_targetItem == null)
+						if(m_targetItem == null && GetTargetItem() == null)
 						{
 							m_manager.RemoveEnemy(this);
 						}
@@ -150,10 +164,20 @@ public class EnemyController : MonoBehaviour
 
 	public void AddItem(Item item)
 	{
+		item.SetPickedUp(true);
 		m_pickedItem = item;
 		m_pickedItem.transform.parent = transform;
 		m_pickedItem.transform.position = transform.position;
 		SetEnemyState(EnemyStates.Fleeing);
+	}
+
+	public void DropItem()
+	{
+		if(m_pickedItem != null)
+		{
+			m_pickedItem.transform.parent = null;
+			m_pickedItem.SetPickedUp(false);
+		}
 	}
 
 	public void RemoveItem()

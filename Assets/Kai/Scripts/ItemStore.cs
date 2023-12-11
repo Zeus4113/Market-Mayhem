@@ -26,28 +26,22 @@ public class ItemStore : MonoBehaviour
 		}
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if (collision == null) return;
+	//private void OnTriggerEnter2D(Collider2D collision)
+	//{
+	//	if (collision == null) return;
 		
-		if(collision.GetComponent<EnemyController>() == null) return;
+	//	if(collision.GetComponent<EnemyController>() == null) return;
 
-		EnemyController enemyController = collision.GetComponent<EnemyController>();
+	//	EnemyController enemyController = collision.GetComponent<EnemyController>();
 
-		if(enemyController.GetPickedItem() != null) return;
+	//	if(enemyController.GetPickedItem() != null) return;
 
-		if(m_items.Count == 0) return;
+	//	if(m_items.Count == 0) return;
 
-		enemyController.AddItem(m_items[m_items.Count-1]);
-		m_items.Remove(m_items[m_items.Count - 1]);
+	//	enemyController.AddItem(m_items[m_items.Count-1]);
+	//	m_items.Remove(m_items[m_items.Count - 1]);
 		
-	}
-
-	public bool CheckRemainingItems()
-	{
-		if (m_items.Count == 0) return false;
-		else return true;
-	}
+	//}
 
 	public int GetItemCount()
 	{
