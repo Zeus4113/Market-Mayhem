@@ -20942,6 +20942,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9067126823078514002, guid: 62247bfb24166c7438c5ce2aa73781b3, type: 3}
+      propertyPath: NoiseModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067126823078514002, guid: 62247bfb24166c7438c5ce2aa73781b3, type: 3}
       propertyPath: TrailModule.enabled
       value: 1
       objectReference: {fileID: 0}
