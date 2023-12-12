@@ -211,7 +211,12 @@ public class Throwable : MonoBehaviour
         OnDropped();
         //this.transform.parent = null;
         this.GetComponent<Rigidbody2D>().AddForce(m_playerHand.GetComponent<PlayerActions>().GetPlayerController().transform.up * 10, ForceMode2D.Impulse);
-        m_audioComponent.PlayAudio(m_punchWoosh);
+
+		if(m_audioComponent != null)
+		{
+			m_audioComponent.PlayAudio(m_punchWoosh);
+		}
+
         switch (m_handSide.ToLower())
         {
             case "left":

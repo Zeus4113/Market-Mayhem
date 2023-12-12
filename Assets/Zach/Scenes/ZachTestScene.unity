@@ -687,6 +687,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WeaponSpawnManager
       objectReference: {fileID: 0}
+    - target: {fileID: 9212615491291446408, guid: e90a813431a7dc848a624a8f9ea46cca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -19,7 +19,12 @@ public class ThrowableExplosion : MonoBehaviour
         {
             m_explodeParticles.transform.position = transform.position;
             m_explodeParticles.Play();
-            m_audioSource.Play();
+
+			if(m_audioSource != null)
+			{
+				m_audioSource.Play();
+			}
+
             Destroy(this.gameObject);
         }     
     }
@@ -36,6 +41,9 @@ public class ThrowableExplosion : MonoBehaviour
 
     public void SetAudio(AudioClip clip)
     {
-        m_audioSource.clip = clip;
+		if(m_audioSource != null)
+		{
+			m_audioSource.clip = clip;
+		}
     }
 }
