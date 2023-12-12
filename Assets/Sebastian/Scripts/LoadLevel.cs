@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class LoadLevel : MonoBehaviour
 {
+	public void RestartCurrentLevel()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+	}
+
     public void LoadNewLevel(string levelName)
     {
         SceneManager.LoadScene(levelName);

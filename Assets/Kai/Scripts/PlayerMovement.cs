@@ -34,22 +34,34 @@ public class PlayerMovement : MonoBehaviour
 		m_playerInputComponent = playerInputComponent;
 		m_rb = GetComponent<Rigidbody2D>();
 
-		m_playerInputComponent.actions.FindAction("Movement").performed += OnBeginMove;
-		m_playerInputComponent.actions.FindAction("Movement").canceled += OnEndMove;
-
-		m_playerInputComponent.actions.FindAction("Mouse").performed += OnBeginRotate;
-		m_playerInputComponent.actions.FindAction("Mouse").canceled += OnEndRotate;
+		BindEvents(true);
 	}
 
 	private void OnDestroy()
 	{
 		if (m_playerInputComponent == null) return;
 
-		m_playerInputComponent.actions.FindAction("Movement").performed -= OnBeginMove;
-		m_playerInputComponent.actions.FindAction("Movement").canceled -= OnEndMove;
+		BindEvents(false);
+	}
 
-		m_playerInputComponent.actions.FindAction("Mouse").performed -= OnBeginRotate;
-		m_playerInputComponent.actions.FindAction("Mouse").canceled -= OnEndRotate;
+	public void BindEvents(bool isTrue)
+	{
+		if(isTrue) 
+		{
+			m_playerInputComponent.actions.FindAction("Movement").performed += OnBeginMove;
+			m_playerInputComponent.actions.FindAction("Movement").canceled += OnEndMove;
+
+			m_playerInputComponent.actions.FindAction("Mouse").performed += OnBeginRotate;
+			m_playerInputComponent.actions.FindAction("Mouse").canceled += OnEndRotate;
+		}
+		else if (!isTrue)
+		{
+			m_playerInputComponent.actions.FindAction("Movement").performed -= OnBeginMove;
+			m_playerInputComponent.actions.FindAction("Movement").canceled -= OnEndMove;
+
+			m_playerInputComponent.actions.FindAction("Mouse").performed -= OnBeginRotate;
+			m_playerInputComponent.actions.FindAction("Mouse").canceled -= OnEndRotate;
+		}
 	}
 
 	// Player Movement

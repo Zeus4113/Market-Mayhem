@@ -5,11 +5,16 @@ using UnityEngine.UI;
 
 public class UserInterfaceManager : MonoBehaviour
 {
+	public delegate void GameEndEvent();
+	public event GameEndEvent gameLoss;
+	public event GameEndEvent gameWon;
+
 	private GameManager m_gameManager;
 
 	private Canvas m_canvas;
 	private GameObject m_progressBar;
-	private GameObject m_gameOverImage;
+	private GameObject m_gameOver;
+	private GameObject m_winScreen;
 	private GameObject m_digitalClock;
 	private GameObject m_calendar;
 	private GameObject m_peopleCounter;
@@ -21,7 +26,6 @@ public class UserInterfaceManager : MonoBehaviour
 	{
 		m_gameManager = gm;
 
-
 		m_canvas = GetComponent<Canvas>();
 		if (mainCamera != null)
 		{
@@ -32,10 +36,12 @@ public class UserInterfaceManager : MonoBehaviour
 		m_gameManager.GetEnemyManager().enemyCountChange += SetPeopleCount;
 
 		m_progressBar = this.transform.GetChild(0).gameObject;
-		m_gameOverImage = this.transform.GetChild(1).gameObject;
-		m_calendar = this.transform.GetChild(2).gameObject;
-		m_digitalClock = this.transform.GetChild(3).gameObject;
-		m_peopleCounter = this.transform.GetChild(4).gameObject;
+		m_gameOver = this.transform.GetChild(1).gameObject;
+		m_winScreen = this.transform.GetChild(2).gameObject;
+
+		m_calendar = this.transform.GetChild(3).gameObject;
+		m_digitalClock = this.transform.GetChild(4).gameObject;
+		m_peopleCounter = this.transform.GetChild(5).gameObject;
 
 		m_progressBarSlider = m_progressBar.GetComponentInChildren<Slider>();
 		m_peopleCounterText = m_peopleCounter.GetComponentInChildren<TMPro.TextMeshProUGUI>();
@@ -53,28 +59,71 @@ public class UserInterfaceManager : MonoBehaviour
 
 	private void SetProgressBar(float barPercentage)
 	{
-		if(m_progressBar != null && m_progressBar.activeSelf && m_progressBarSlider != null) { m_progressBarSlider.value = barPercentage; }
+		if(m_progressBar != null && m_progressBar.activeSelf && m_progressBarSlider != null) 
+		{ 
+			m_progressBarSlider.value = barPercentage;
+			if(barPercentage <= 0) { EndGame("loss"); }
+		}
 	}
 
 	private void SetPeopleCount(int peopleCount)
 	{
 		if (m_peopleCounter != null && m_peopleCounter.activeSelf && m_peopleCounterText != null) { m_peopleCounterText.text = peopleCount.ToString(); }
+		//Debug.Log(m_progressBarSlider.value);
+		if (peopleCount <= 0 && m_progressBarSlider.value > 0.05) { EndGame("win"); }
 	}
 
-	public void EnableGameOverWidget(bool isTrue)
+	private void EndGame(string gameState)
 	{
-		if (m_gameOverImage == null) return;
-		m_gameOverImage.gameObject.SetActive(isTrue);
+
+		if(gameState == "win")
+		{
+			EnableWidget("win screen overlay", true);
+		}
+		else if (gameState == "loss")
+		{
+			EnableWidget("game over overlay", true);
+		}
+
 	}
 
-	public void EnableProgressBar(bool isTrue) 
+
+	public void EnableWidget(string name, bool isTrue)
 	{
-		if (m_progressBar == null) return;
-		m_progressBar.gameObject.SetActive(isTrue);
-	}
-	public void EnableClockWidget(bool isTrue)
-	{
-		m_canvas.gameObject.SetActive(isTrue);
+		string widgetName = name.ToLower();
+
+		switch (widgetName)
+		{
+			case "progress bar":
+				if (m_progressBar == null) return;
+				m_progressBar.gameObject.SetActive(isTrue);
+				break;
+
+			case "game over overlay":
+				if (m_gameOver == null) return;
+				m_gameOver.gameObject.SetActive(isTrue);
+				break;
+
+			case "win screen overlay":
+				if (m_winScreen == null) return;
+				m_winScreen.gameObject.SetActive(isTrue);
+				break;
+
+			case "people counter":
+				if (m_peopleCounter == null) return;
+				m_peopleCounter.gameObject.SetActive(isTrue);
+				break;
+
+			case "calendar":
+				if (m_calendar == null) return;
+				m_calendar.gameObject.SetActive(isTrue);
+				break;
+
+			case "digital clock":
+				if (m_digitalClock == null) return;
+				m_digitalClock.gameObject.SetActive(isTrue);
+				break;
+		}
 	}
 
 	public GameObject GetWidget(string name)
@@ -89,7 +138,7 @@ public class UserInterfaceManager : MonoBehaviour
 				break;
 
 			case "game over overlay":
-				myObject = m_gameOverImage;
+				myObject = m_gameOver;
 				break;
 
 			case "people counter":

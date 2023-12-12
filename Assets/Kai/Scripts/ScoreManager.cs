@@ -100,7 +100,7 @@ public class ScoreManager : MonoBehaviour
 		}
 
 		BindItemEvents();
-		m_userInterfaceManager.EnableGameOverWidget(false);
+		m_userInterfaceManager.EnableWidget("game over overlay", false);
 
 		m_totalItems = m_numberOfItems;
 		return;
@@ -126,8 +126,8 @@ public class ScoreManager : MonoBehaviour
 
 		if (barPercentage <= 0f)
 		{
-			m_userInterfaceManager.EnableGameOverWidget(true);
-			m_userInterfaceManager.EnableProgressBar(false);
+			m_userInterfaceManager.EnableWidget("game over overlay", true);
+			m_userInterfaceManager.EnableWidget("progress bar", false);
 		}
 
 		updateProgressBar?.Invoke(barPercentage);

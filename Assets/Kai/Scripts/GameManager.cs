@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 
 // Data Seperation Structs
@@ -68,6 +69,11 @@ public class GameManager : MonoBehaviour
 	{
 		Init(m_LevelDataScriptableObject);
 		m_startTrigger.GetComponent<StartGameTrigger>().onStart += StartGame;
+	}
+
+	public void GameOver()
+	{
+		SceneManager.LoadScene("mainMenu");
 	}
 
 	public void Init(LevelDataScriptableObject inputData)
@@ -185,6 +191,11 @@ public class GameManager : MonoBehaviour
 		m_UIManager.StartGame();
 		m_enemyManager.StartSpawnEnemies();
 		m_weaponManager.BeginSpawning();
+	}
+
+	public PlayerController GetPlayerController()
+	{
+		return m_playerController;
 	}
 
 	public EnemyManager GetEnemyManager() { return m_enemyManager; }

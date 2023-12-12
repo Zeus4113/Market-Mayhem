@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         Transform swingPositions = this.transform.Find("Swing Positions");
         m_leftSwingPosition = swingPositions.GetChild(1);
         m_rightSwingPosition = swingPositions.GetChild(0);
-
+		;
         SetupHands();
 		InitialisePlayerComponents();
 	}

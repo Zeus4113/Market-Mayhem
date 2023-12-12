@@ -16,6 +16,12 @@ public class SwitchStatesOnTrigger : MonoBehaviour
 
 
 		enemyController.RemoveItem();
+
+		if(enemyController.GetTargetItem() == null)
+		{
+			enemyController.GetEnemyManager().RemoveEnemy(enemyController);
+		}
+
 		//enemyController.SetEnemyState(m_triggeredState);
 	}
 }

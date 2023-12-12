@@ -45,7 +45,7 @@ public class EnemyController : MonoBehaviour
 		List<Item> currentItems = m_manager.GetGameManager().GetScoreManager().GetItemList();
 
 		int validItems = currentItems.Count;
-		//Debug.Log(validItems);
+		Debug.Log(validItems);
 
 		while (true)
 		{
@@ -58,9 +58,10 @@ public class EnemyController : MonoBehaviour
 			else if(newItem.IsPickedUp())
 			{
 				validItems--;
-				//Debug.Log(validItems);
+				Debug.Log(validItems);
 				if (validItems == 0) break;
 			}
+
 		}
 
 		return null;
@@ -117,7 +118,8 @@ public class EnemyController : MonoBehaviour
 
 						if(m_targetItem == null && GetTargetItem() == null)
 						{
-							m_manager.RemoveEnemy(this);
+							SetEnemyState(EnemyStates.Fleeing);
+							//m_manager.RemoveEnemy(this);
 						}
 					}
 
