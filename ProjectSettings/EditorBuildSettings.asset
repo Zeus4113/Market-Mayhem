@@ -8,13 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sebastian/Scenes/MainMenu.unity
     guid: bb80fb50e04a0544693cc358053ea884
-  - enabled: 1
+  - enabled: 0
     path: Assets/Kai/Scenes/TestScene.unity
     guid: 9ef81768253465547902b8b061abe3ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Kai/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Sebastian/Scenes/LoadingScreen.unity
     guid: f0efdffb2c938ed49badf07da9667a5c
   - enabled: 1
@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Kai/Scenes/WoodenScene.unity
     guid: 083715d8f61fb25488efc91fa546a8f0
+  - enabled: 1
+    path: Assets/Kai/Scenes/AquaScene.unity
+    guid: 96da25c93ab8723449047cf5b69a1975
   m_configObjects: {}
