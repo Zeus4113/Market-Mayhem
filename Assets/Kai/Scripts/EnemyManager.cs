@@ -12,6 +12,8 @@ public class EnemyManager : MonoBehaviour
 	private GameManager m_gameManager;
 	private Transform[] m_spawnPositons;
 
+	private UserInterfaceManager m_userInterfaceManager;
+
 	List<EnemyController> m_enemyList = new List<EnemyController>();
 
 	Coroutine C_SpawnEnemies;
@@ -24,6 +26,18 @@ public class EnemyManager : MonoBehaviour
 		enemySetupData = myData;
 		m_gameManager = gm;
 		m_spawnPositons = positions;
+		m_userInterfaceManager = m_gameManager.GetUIManager();
+
+		m_userInterfaceManager.gameLoss += ClearEnemies;
+		m_userInterfaceManager.gameWon += ClearEnemies;
+	}
+
+	private void ClearEnemies()
+	{
+		for (int i = 0; i < m_enemyList.Count; i++)
+		{
+			RemoveEnemy(m_enemyList[i]);
+		}
 	}
 
 	public void StartSpawnEnemies()

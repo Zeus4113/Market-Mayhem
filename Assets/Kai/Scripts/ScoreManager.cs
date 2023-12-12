@@ -55,6 +55,14 @@ public class ScoreManager : MonoBehaviour
 
 	}
 
+	private void ClearItems()
+	{
+		for (int i = 0; i < m_itemList.Count; i++)
+		{
+			RemoveItemFromList(m_itemList[i]);
+		}
+	}
+
 	private void BindHUDElements()
 	{
 		if (m_userInterfaceManager == null) return;

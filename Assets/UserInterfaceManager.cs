@@ -46,6 +46,8 @@ public class UserInterfaceManager : MonoBehaviour
 		m_progressBarSlider = m_progressBar.GetComponentInChildren<Slider>();
 		m_peopleCounterText = m_peopleCounter.GetComponentInChildren<TMPro.TextMeshProUGUI>();
 
+
+		m_digitalClock.GetComponent<TimerController>().OnDayEnd += GameWon;
 		m_calendar.SetActive(true);
 	}
 
@@ -62,7 +64,7 @@ public class UserInterfaceManager : MonoBehaviour
 		if(m_progressBar != null && m_progressBar.activeSelf && m_progressBarSlider != null) 
 		{ 
 			m_progressBarSlider.value = barPercentage;
-			if(barPercentage <= 0) { EndGame("loss"); }
+			if(barPercentage <= 0 && m_winScreen.activeSelf == false) { GameLoss(); }
 		}
 	}
 
@@ -70,21 +72,21 @@ public class UserInterfaceManager : MonoBehaviour
 	{
 		if (m_peopleCounter != null && m_peopleCounter.activeSelf && m_peopleCounterText != null) { m_peopleCounterText.text = peopleCount.ToString(); }
 		//Debug.Log(m_progressBarSlider.value);
-		if (peopleCount <= 0 && m_progressBarSlider.value > 0.05) { EndGame("win"); }
+		if (peopleCount <= 0 && m_gameOver.activeSelf == false) { GameWon(); }
 	}
 
-	private void EndGame(string gameState)
+	private void GameLoss()
 	{
+		EnableWidget("game over overlay", true);
 
-		if(gameState == "win")
-		{
-			EnableWidget("win screen overlay", true);
-		}
-		else if (gameState == "loss")
-		{
-			EnableWidget("game over overlay", true);
-		}
+		gameLoss?.Invoke();
+	}
 
+	private void GameWon()
+	{
+		EnableWidget("win screen overlay", true);
+
+		gameWon?.Invoke();
 	}
 
 

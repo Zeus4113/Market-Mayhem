@@ -37,15 +37,17 @@ public class PlayerMovement : MonoBehaviour
 		BindEvents(true);
 	}
 
-	//private void OnDestroy()
-	//{
-	//	if (m_playerInputComponent == null) return;
+	private void OnDestroy()
+	{
+		//if (m_playerInputComponent == null) return;
 
-	//	BindEvents(false);
-	//}
+		BindEvents(false);
+	}
 
 	public void BindEvents(bool isTrue)
 	{
+		if(m_playerInputComponent == null) { return; }
+
 		if(isTrue) 
 		{
 			m_playerInputComponent.actions.FindAction("Movement").performed += OnBeginMove;
@@ -108,6 +110,8 @@ public class PlayerMovement : MonoBehaviour
 
 	void OnBeginRotate(InputAction.CallbackContext ctx)
 	{
+		if (this == null) return;
+
 		m_mousePosition = ctx.ReadValue<Vector2>();
 		c_isRotating = true;
 
@@ -118,6 +122,8 @@ public class PlayerMovement : MonoBehaviour
 	}
 	void OnEndRotate(InputAction.CallbackContext ctx)
 	{
+		if (this == null) return;
+
 		m_mousePosition = ctx.ReadValue<Vector2>();
 		c_isRotating = false;
 
