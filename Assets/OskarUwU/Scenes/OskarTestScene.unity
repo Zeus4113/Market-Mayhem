@@ -20251,7 +20251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1138937449850542870, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.064259
+      value: 1.29
       objectReference: {fileID: 0}
     - target: {fileID: 1138937449850542870, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -20289,9 +20289,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2467170801249435235, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 2467170801249435235, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3453013003576189249, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
       propertyPath: m_Name
       value: Wood Break
+      objectReference: {fileID: 0}
+    - target: {fileID: 5819590361980693112, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5819590361980693112, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5819590361980693112, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5819590361980693112, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
