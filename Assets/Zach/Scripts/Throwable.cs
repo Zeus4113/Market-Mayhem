@@ -261,7 +261,7 @@ public class Throwable : MonoBehaviour
 
     private IEnumerator DisableCollision()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
         this.gameObject.layer = LayerMask.NameToLayer("IgnoreAll");
     }
 

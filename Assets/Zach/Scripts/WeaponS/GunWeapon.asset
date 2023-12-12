@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d97b707419ff264aae085f55f08a592, type: 3}
+  m_Name: GunWeapon
+  m_EditorClassIdentifier: 
+  m_spriteEquipped: {fileID: 21300000, guid: 510e3e9cbaba239429f17508f6c1a2c9, type: 3}
+  m_spriteUnequipped: {fileID: 21300000, guid: e455a43683f1a934ab87377d418d8ee7, type: 3}
+  m_spriteDamaged: {fileID: 21300000, guid: 510e3e9cbaba239429f17508f6c1a2c9, type: 3}
+  m_spriteDestroyed: {fileID: 21300000, guid: e455a43683f1a934ab87377d418d8ee7, type: 3}
+  m_breakParticles: {fileID: 52453051734204284, guid: 1dab48389ec657d44a2ccf093a4e9847, type: 3}
+  m_explodeParticles: {fileID: 0}
+  m_hitParticles: {fileID: 5659918374015372325, guid: c64480e6b0055c94c910c4081df838a4, type: 3}
+  m_hitAudio: {fileID: 8300000, guid: f05e9cf1cbe06c040a77b9ce7b3108e7, type: 3}
+  m_durability: 8
+  m_handleOffset: 0
+  m_handleVertOffset: 0.2
+  m_rotationOffset: 0
+  m_damage: 50
+  m_knockback: 20
+  m_explodeOnThrow: 0
+  m_damageType: blunt
+  m_ranged: 1
+  m_projectilePrefab: {fileID: 3601132207122045981, guid: 1a6c744d8b27ffe42843a1c2df8be804, type: 3}
+  m_fireSound: {fileID: 8300000, guid: 2a8547b21f57ced49bb87b2c2cf2935e, type: 3}
