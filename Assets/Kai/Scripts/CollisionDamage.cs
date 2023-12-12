@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CollisionDamage : MonoBehaviour
 {
-	[SerializeField] private float m_damageMultiplier = 10f;
+	[SerializeField] private float m_damage = 10f;
 	[SerializeField] private float m_forceMultiplier = 10f;
 	[SerializeField] private GameObject m_hitParticlesObject;
 	[SerializeField] private AudioClip m_hitAudioClip;
@@ -12,12 +12,12 @@ public class CollisionDamage : MonoBehaviour
 	private ParticleSystem m_hitParticles;
 	private Rigidbody2D m_rigidbody;
 	private bool m_attacking = false;
-	private AudioPlayerScript m_audioComponent;
+	private AudioSource m_audioSource;
 
 	private void Awake()
 	{
 		m_rigidbody = GetComponent<Rigidbody2D>();
-        m_audioComponent = GetComponent<AudioPlayerScript>();
+        m_audioSource = GetComponent<AudioSource>();
 		if (m_hitParticlesObject) SetHitParicles(m_hitParticlesObject);
 	}
 
@@ -25,16 +25,17 @@ public class CollisionDamage : MonoBehaviour
 	{
 		if (collision == null) return;
 
-		if(collision.GetComponent<IDamageable>() == null) return;
+        if (collision.GetComponent<IDamageable>() == null) return;
 
-		if (!m_attacking) return;
+        if (!m_attacking) return;
 
 		Rigidbody2D rigidbody2D = collision.GetComponent<Rigidbody2D>();
 		IDamageable damageable = collision.GetComponent<IDamageable>();
 		EnemyController controller = collision.GetComponent<EnemyController>();
 
-		Debug.Log("Damage: " + m_rigidbody.velocity.magnitude * m_damageMultiplier);
-		damageable.Damage(m_rigidbody.velocity.magnitude * m_damageMultiplier);
+		Debug.Log(this.gameObject.name + " Damage: " + m_damage
+			);
+		damageable.Damage(m_damage);
 
 		Vector2 force = new Vector2(m_rigidbody.velocity.x * m_forceMultiplier, m_rigidbody.velocity.y * m_forceMultiplier);
 
@@ -46,10 +47,14 @@ public class CollisionDamage : MonoBehaviour
 			m_hitParticles.Play();
 		}
 
-		if (m_hitAudioClip) m_audioComponent.PlayAudio(m_hitAudioClip);
+		if (m_hitAudioClip)
+		{
+			m_audioSource.clip = m_hitAudioClip;
+			m_audioSource.Play();
+		}
 
 
-        if (controller)
+			if (controller)
 		{
 			controller.SetEnemyState(EnemyStates.Stunned);
 		}
@@ -63,7 +68,7 @@ public class CollisionDamage : MonoBehaviour
 
 	public void SetDamageStats(float damage, float knockback)
 	{
-		m_damageMultiplier = damage;
+		m_damage = damage;
 		m_forceMultiplier = knockback;
     }
 

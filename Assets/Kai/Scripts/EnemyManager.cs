@@ -55,8 +55,8 @@ public class EnemyManager : MonoBehaviour
 		{
 			for(int i = 0; i < amount; i++)
 			{
-				Debug.Log(i);
-				Debug.Log(amount);
+				//Debug.Log(i);
+				//Debug.Log(amount);
 				SpawnNewEnemy();
 				yield return new WaitForSeconds(enemySetupData.enemySpawnDelay);
 			}

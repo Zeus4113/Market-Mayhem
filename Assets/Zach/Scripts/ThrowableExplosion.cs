@@ -6,11 +6,11 @@ public class ThrowableExplosion : MonoBehaviour
 {
     private ParticleSystem m_explodeParticles;
     private bool m_canExplode = false;
-    private AudioSource m_audioSource;
+    private Throwable m_throwable;
 
     private void Awake()
     {
-        m_audioSource = GetComponent<AudioSource>();
+        m_throwable = GetComponent<Throwable>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -20,12 +20,7 @@ public class ThrowableExplosion : MonoBehaviour
             m_explodeParticles.transform.position = transform.position;
             m_explodeParticles.Play();
 
-			if(m_audioSource != null)
-			{
-				m_audioSource.Play();
-			}
-
-            Destroy(this.gameObject);
+            StartCoroutine(DestroyAfterSound());
         }     
     }
 
@@ -39,11 +34,12 @@ public class ThrowableExplosion : MonoBehaviour
         m_canExplode = canExplode;
     }
 
-    public void SetAudio(AudioClip clip)
+    private IEnumerator DestroyAfterSound()
     {
-		if(m_audioSource != null)
-		{
-			m_audioSource.clip = clip;
-		}
+        m_throwable.PlayHitAudio();
+        m_throwable.gameObject.layer = LayerMask.NameToLayer("IgnoreAll");
+        m_throwable.GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(2);
+        Destroy(this.gameObject);
     }
 }

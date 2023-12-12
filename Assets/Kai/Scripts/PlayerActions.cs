@@ -31,8 +31,8 @@ public class PlayerActions : MonoBehaviour
 
 	private bool canAttack = true;
 
-	private bool IsHolding = false;
-	private GameObject HeldItem;
+	private bool m_isHolding = false;
+	private GameObject m_heldItem;
 
 	private Sprite m_handSprite;
 	private Rigidbody2D m_punchAnimRB;
@@ -40,7 +40,7 @@ public class PlayerActions : MonoBehaviour
 	private int m_handSideMultiplier;
 
 	private CollisionDamage m_damageComponent;
-	private AudioPlayerScript m_audioComponent;
+	private AudioSource m_audioSource;
 
 	private bool m_ranged = false;
 
@@ -51,7 +51,7 @@ public class PlayerActions : MonoBehaviour
 		m_punchAnimator.SetActive(false);
 		m_punchAnimRB = m_punchAnimator.GetComponent<Rigidbody2D>();
 		m_damageComponent = GetComponent<CollisionDamage>();
-        m_audioComponent = GetComponent<AudioPlayerScript>();
+        m_audioSource = GetComponent<AudioSource>();
     }
 
 	public void Init(PlayerInput inputComponent, Transform homeLocation, Transform swingPosition, PlayerController characterController, string handSide)
@@ -169,7 +169,7 @@ public class PlayerActions : MonoBehaviour
 			if (Vector2.Distance(this.transform.position, m_handHomeTransform.position) < 0.5f)
 			{
                 this.transform.rotation = m_playerController.transform.rotation;
-                switch (IsHolding && !m_ranged)
+                switch (m_isHolding && !m_ranged)
 				{
 					case true:
                         this.transform.rotation *= Quaternion.Euler(m_playerController.transform.forward * 90 * m_handSideMultiplier);
@@ -236,7 +236,7 @@ public class PlayerActions : MonoBehaviour
 	{
         m_handRB.velocity = new Vector2(0, 0);
         m_handRB.angularVelocity = 0;
-        switch (IsHolding)
+        switch (m_isHolding)
 		{
 			case true:       
                 this.transform.position = m_savedSwingTransform.position;
@@ -253,8 +253,8 @@ public class PlayerActions : MonoBehaviour
                         m_handRB.AddForce((m_playerController.transform.up - m_playerController.transform.right/3) * m_punchForce, ForceMode2D.Impulse);
                         m_handRB.AddTorque(1000f);
                         break;
-				}            
-				HeldItem.GetComponent<Throwable>().EditDurability(-1);
+				}
+                m_heldItem.GetComponent<Throwable>().EditDurability(-1);
                 break;
 
 			case false:
@@ -263,14 +263,18 @@ public class PlayerActions : MonoBehaviour
 				break;
         }
         canAttack = false;
-		m_damageComponent.SetAttacking(true);
-		m_audioComponent.PlayAudio(m_punchSwooshAudioClip);
+		if (!m_isHolding) m_damageComponent.SetAttacking(true);
+		else if (m_isHolding && m_heldItem != null) m_heldItem.GetComponent<CollisionDamage>().SetAttacking(true);
+
+		m_audioSource.clip = m_punchSwooshAudioClip;
+		m_audioSource.Play();
 
         yield return new WaitForSeconds(m_attackCooldown);
 
         canAttack = true;
         m_damageComponent.SetAttacking(false);
 
+        if (m_isHolding && m_heldItem != null) m_heldItem.GetComponent<CollisionDamage>().SetAttacking(false);
     }
 
     private IEnumerator PlayAnimation()
@@ -287,11 +291,11 @@ public class PlayerActions : MonoBehaviour
 
 	public void SetHolding(bool HoldingBool, GameObject Item, bool ranged)
 	{
-		IsHolding = HoldingBool;
-		HeldItem = Item;
+        m_isHolding = HoldingBool;
+        m_heldItem = Item;
 		m_ranged = ranged;
 
-		switch (IsHolding && !m_ranged)
+		switch (m_isHolding && !m_ranged)
 		{
 			case true:
 				GetComponent<SpriteRenderer>().sprite = m_holdingHandSprite;
@@ -309,7 +313,7 @@ public class PlayerActions : MonoBehaviour
 
 	public bool GetHolding()
 	{
-		return IsHolding;
+		return m_isHolding;
 	}
 
 	public PlayerController GetPlayerController()
