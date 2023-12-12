@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: fc6c963063ec93541832dc83393187ec
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Pixellari
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 51d7cf470b1aef3479dc05f89e686f7a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
