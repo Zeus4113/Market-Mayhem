@@ -27,5 +27,7 @@ MonoBehaviour:
   m_damage: 50
   m_knockback: 20
   m_explodeOnThrow: 0
+  m_damageType: basic
   m_ranged: 1
   m_projectilePrefab: {fileID: 3601132207122045981, guid: f935cde775b2a2d4a902a523da8a365b, type: 3}
+  m_fireSound: {fileID: 8300000, guid: 9588a43ddaaf3e541bb89d93042af25c, type: 3}

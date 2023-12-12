@@ -280,6 +280,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_deadEnemy: {fileID: 5037155403769787392, guid: f1c25e7665e2a6c44842fc2a3f2a424b, type: 3}
+  m_deadEnemyTwo: {fileID: 5037155403769787392, guid: 9c0ff043974330047be12e6df1ff2a7e, type: 3}
+  m_deadEnemyNoHead: {fileID: 5037155403769787392, guid: ba3715e49d1675f4dbc3ba83db76a89b, type: 3}
+  m_deadEnemyNoHeadTwo: {fileID: 5037155403769787392, guid: 5c7317bc5fcdf0040858970faf248f5c, type: 3}
   m_maxHealth: 100
 --- !u!58 &-6500587951054160866
 CircleCollider2D:

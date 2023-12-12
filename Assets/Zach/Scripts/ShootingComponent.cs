@@ -10,10 +10,13 @@ public class ShootingComponent : MonoBehaviour
     private Rigidbody2D m_playerHand;
     private GameObject m_spawnedProjectile;
     private Throwable m_throwable;
+    private AudioSource m_audioSource;
+    private AudioClip m_audioClip;
 
     private void Awake()
     {
         m_throwable = this.gameObject.GetComponent<Throwable>();
+        m_audioSource = this.gameObject.GetComponent<AudioSource>();
     }
 
     public void BindEvents(bool bindBool, PlayerInput playerInputComponent, string handSide)
@@ -50,6 +53,9 @@ public class ShootingComponent : MonoBehaviour
         m_spawnedProjectile = Instantiate(m_projectile, transform.position, transform.rotation);
         m_spawnedProjectile.GetComponent<Projectile>().FireProjectile(m_playerHand.transform, 50f);
         m_throwable.EditDurability(-1);
+
+        m_audioSource.clip = m_audioClip;
+        m_audioSource.Play();
     }
 
     public void SetProjectile(GameObject projectile)
@@ -60,5 +66,10 @@ public class ShootingComponent : MonoBehaviour
     public void SetPlayerHand(Rigidbody2D playerHand)
     {
         m_playerHand = playerHand;
+    }
+
+    public void SetFireSound(AudioClip fireSound)
+    {
+        m_audioClip = fireSound;
     }
 }

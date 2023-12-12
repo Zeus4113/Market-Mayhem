@@ -198,6 +198,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c6d59acbdf9d564989ca5c4c2e4385d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_damage: 40
+  m_knockback: 20
+  m_damageType: basic
 --- !u!114 &590322138477006023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 132abb7ff00465646b20e352508b416a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 25
+  m_damage: 40
   m_forceMultiplier: 10
   m_hitParticlesObject: {fileID: 2042980795568123917, guid: e7ccfc61d23be3345a2799f5a2025def, type: 3}
   m_hitAudioClip: {fileID: 0}

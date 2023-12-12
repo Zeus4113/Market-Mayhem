@@ -27,6 +27,7 @@ public class Throwable : MonoBehaviour
     private bool m_explodeOnThrow;
     private Rigidbody2D m_RB;
     private bool m_ranged;
+    private string m_damageType;
 
 
     private SpriteRenderer m_spriteRenderer;
@@ -35,6 +36,7 @@ public class Throwable : MonoBehaviour
     private ThrowableExplosion m_throwableExplosion;
     private AudioSource m_audioSource;
     private AudioClip m_hitAudio;
+    private AudioClip m_fireAudio;
 
     private void Awake()
     {
@@ -61,10 +63,11 @@ public class Throwable : MonoBehaviour
         m_explodeOnThrow = weaponData.m_explodeOnThrow;
         m_hitAudio = weaponData.m_hitAudio;
         m_ranged = weaponData.m_ranged;
+        m_damageType = weaponData.m_damageType;
 
         m_breakParticles = Instantiate(weaponData.m_breakParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
 
-        m_collisionDamage.SetDamageStats(weaponData.m_damage, weaponData.m_knockback);
+        m_collisionDamage.SetDamageStats(weaponData.m_damage, weaponData.m_knockback, m_damageType);
         m_collisionDamage.setHitAudio(m_hitAudio);
 
         switch (m_explodeOnThrow)
@@ -82,6 +85,8 @@ public class Throwable : MonoBehaviour
         {
             case true:
                 m_shootingComponent.SetProjectile(weaponData.m_projectilePrefab);
+                m_fireAudio = weaponData.m_fireSound;
+                m_shootingComponent.SetFireSound(m_fireAudio);
                 break;
             case false:
                 m_shootingComponent.enabled = false;

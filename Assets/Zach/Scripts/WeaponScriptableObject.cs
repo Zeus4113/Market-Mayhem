@@ -22,7 +22,9 @@ public class WeaponScriptableObject : ScriptableObject
     public float m_damage = 0;
     public float m_knockback = 0;
     public bool m_explodeOnThrow = false;
+    public string m_damageType;
 
     public bool m_ranged = false;
     public GameObject m_projectilePrefab;
+    public AudioClip m_fireSound;
 }

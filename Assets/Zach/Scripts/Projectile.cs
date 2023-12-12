@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    [SerializeField] private float m_damage = 40;
+    [SerializeField] private float m_knockback = 20;
+    [SerializeField] private string m_damageType;
+
     private Rigidbody2D m_RB;
     private Coroutine C_LifeSpan;
     private bool m_alive = false;
@@ -14,6 +18,7 @@ public class Projectile : MonoBehaviour
         m_RB = GetComponent<Rigidbody2D>();
         m_damageComponent = GetComponent<CollisionDamage>();
         m_damageComponent.SetAttacking(true);
+        m_damageComponent.SetDamageStats(m_damage, m_knockback, m_damageType);
     }
     public void FireProjectile(Transform fireTransform, float fireSpeed)
     {

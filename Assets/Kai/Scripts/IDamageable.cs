@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IDamageable
 {
 	void SetHealth(float health);
-	void Damage(float damage);
+	void Damage(float damage, string damageType);
 	bool IsAlive();
 
 }

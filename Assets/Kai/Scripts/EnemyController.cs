@@ -60,7 +60,7 @@ public class EnemyController : MonoBehaviour
 			else if(newItem.IsPickedUp())
 			{
 				validItems--;
-				Debug.Log(m_manager.GetGameManager().GetScoreManager().GetItemList().Count);
+				//Debug.Log(m_manager.GetGameManager().GetScoreManager().GetItemList().Count);
 				if (validItems == 0) break;
 			}
 

@@ -179,4 +179,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 19521015bf3f1ec43994b4c50a8548b6, type: 2}
   - {fileID: 11400000, guid: 5e29782421198ae4fa70319f9a3728fb, type: 2}
   - {fileID: 11400000, guid: cf6e683ffff06a748adda5e9daf555eb, type: 2}
+  - {fileID: 11400000, guid: 3a18d3ffc729406498c5202e5fcd583b, type: 2}
   m_weaponPrefab: {fileID: 5751362463828491019, guid: ff732a7e8d0efb5448d9160867f49ba1, type: 3}
+  m_spawnDelay: 1
+  m_spawnAmount: 0

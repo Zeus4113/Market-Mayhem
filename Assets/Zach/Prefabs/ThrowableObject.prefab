@@ -235,10 +235,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 132abb7ff00465646b20e352508b416a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damageMultiplier: 10
+  m_damage: 10
   m_forceMultiplier: 10
-  m_hitParticlesObject: {fileID: 5659918374015372325, guid: c64480e6b0055c94c910c4081df838a4, type: 3}
-  m_hitAudioClip: {fileID: 8300000, guid: f05e9cf1cbe06c040a77b9ce7b3108e7, type: 3}
+  m_hitParticlesObject: {fileID: 0}
+  m_hitAudioClip: {fileID: 0}
 --- !u!114 &-5754621556134100318
 MonoBehaviour:
   m_ObjectHideFlags: 0

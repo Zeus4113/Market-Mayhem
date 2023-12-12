@@ -5,8 +5,14 @@ using UnityEngine;
 public class HealthComponent : MonoBehaviour, IDamageable
 {
 	[SerializeField] private GameObject m_deadEnemy;
-	[SerializeField] private float m_maxHealth;
+    [SerializeField] private GameObject m_deadEnemyTwo;
+    [SerializeField] private GameObject m_deadEnemyNoHead;
+    [SerializeField] private GameObject m_deadEnemyNoHeadTwo;
+    [SerializeField] private float m_maxHealth;
 	private float m_currentHealth;
+	private int i;
+
+	private GameObject m_spawnedDeadEnemy;
 
 	void Start()
 	{
@@ -18,7 +24,7 @@ public class HealthComponent : MonoBehaviour, IDamageable
 		m_currentHealth = health;
 	}
 
-	public void Damage(float damage)
+	public void Damage(float damage, string damageType)
 	{
 		m_currentHealth -= damage;
 
@@ -31,8 +37,44 @@ public class HealthComponent : MonoBehaviour, IDamageable
 		{
 			if(m_deadEnemy != null)
 			{
-				Instantiate(m_deadEnemy, transform.position, transform.rotation);
-			}
+				switch (damageType)
+				{
+
+					case "basic":
+						i = Random.Range(0, 2);
+						switch (i)
+						{
+							case 0:
+								m_spawnedDeadEnemy = m_deadEnemy;
+								break;
+							case 1:
+								m_spawnedDeadEnemy = m_deadEnemyTwo;
+								break;
+						}             
+						break;
+
+					case "blunt":
+                        i = Random.Range(0, 4);
+						Debug.Log("blunt "+ i);
+                        switch (i)
+                        {
+                            case 0:
+                                m_spawnedDeadEnemy = m_deadEnemy;
+                                break;
+                            case 1:
+                                m_spawnedDeadEnemy = m_deadEnemyTwo;
+                                break;
+                            case 2:
+                                m_spawnedDeadEnemy = m_deadEnemyNoHead;
+                                break;
+                            case 3:
+                                m_spawnedDeadEnemy = m_deadEnemyNoHeadTwo;
+                                break;
+                        }
+                        break;
+                }
+                Instantiate(m_spawnedDeadEnemy, transform.position, transform.rotation);
+            }
 
 			if (GetComponent<EnemyController>())
 			{
