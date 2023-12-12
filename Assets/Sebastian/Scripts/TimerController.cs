@@ -61,7 +61,7 @@ public class TimerController : MonoBehaviour
 
         while (isCounting)
         {
-			Debug.Log(string.Format("{0:00}:{1:00}", hours, minutes));
+			//Debug.Log(string.Format("{0:00}:{1:00}", hours, minutes));
             minutes++;
 
             if (minutes >= 60)

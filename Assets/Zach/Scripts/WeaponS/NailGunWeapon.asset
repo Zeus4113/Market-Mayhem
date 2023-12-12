@@ -24,7 +24,7 @@ MonoBehaviour:
   m_handleOffset: 0.05
   m_handleVertOffset: 0.2
   m_rotationOffset: 0
-  m_damage: 2
+  m_damage: 50
   m_knockback: 20
   m_explodeOnThrow: 0
   m_ranged: 1

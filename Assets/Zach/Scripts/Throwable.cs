@@ -33,7 +33,8 @@ public class Throwable : MonoBehaviour
     private CollisionDamage m_collisionDamage;
     private ShootingComponent m_shootingComponent;
     private ThrowableExplosion m_throwableExplosion;
-    private AudioPlayerScript m_audioComponent;
+    private AudioSource m_audioSource;
+    private AudioClip m_hitAudio;
 
     private void Awake()
     {
@@ -42,7 +43,7 @@ public class Throwable : MonoBehaviour
         m_shootingComponent = GetComponent<ShootingComponent>();
         m_throwableExplosion = GetComponent<ThrowableExplosion>();
         m_RB = GetComponent<Rigidbody2D>();
-        m_audioComponent = GetComponent<AudioPlayerScript>();
+        m_audioSource = GetComponent<AudioSource>();
     }
     public void Init(WeaponScriptableObject myWeaponData)
     {
@@ -58,18 +59,18 @@ public class Throwable : MonoBehaviour
         m_spriteDamaged = weaponData.m_spriteDamaged;
         m_spriteDestroyed = weaponData.m_spriteDestroyed;
         m_explodeOnThrow = weaponData.m_explodeOnThrow;
+        m_hitAudio = weaponData.m_hitAudio;
         m_ranged = weaponData.m_ranged;
 
         m_breakParticles = Instantiate(weaponData.m_breakParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>();
 
         m_collisionDamage.SetDamageStats(weaponData.m_damage, weaponData.m_knockback);
-        m_collisionDamage.setHitAudio(weaponData.m_hitAudio);
+        m_collisionDamage.setHitAudio(m_hitAudio);
 
         switch (m_explodeOnThrow)
         {
             case true:
                 m_throwableExplosion.SetParticles(weaponData.m_explodeParticles);
-                m_throwableExplosion.SetAudio(weaponData.m_hitAudio);
                 break;
             case false:
                 m_throwableExplosion.enabled = false;
@@ -91,6 +92,7 @@ public class Throwable : MonoBehaviour
     public void SetAttached(PlayerInput playerInputComponent, string HandSide)
     {
         this.gameObject.layer = LayerMask.NameToLayer("Weapon");
+        Debug.Log("Holding");
 
         m_playerInput = playerInputComponent;
         m_handSide = HandSide.ToLower();
@@ -179,7 +181,6 @@ public class Throwable : MonoBehaviour
 
     private void LateUpdate()
     {
-
         if (m_pickedUp)
         {
             this.transform.position = m_playerHand.transform.position;
@@ -190,12 +191,10 @@ public class Throwable : MonoBehaviour
                 case "left":
                     this.transform.position += (m_playerHand.transform.right * m_handleOffset);
                     m_weaponRot *= Quaternion.Euler(Vector3.forward * m_rotationOffset);
-
                     break;
                 case "right":
                     this.transform.position += (m_playerHand.transform.right * -m_handleOffset);
                     m_weaponRot *= Quaternion.Euler(Vector3.forward * (m_rotationOffset + 180));
-
                     break;
             }
             this.transform.position += (m_playerHand.transform.up * m_handleVertOffset);
@@ -211,10 +210,12 @@ public class Throwable : MonoBehaviour
         OnDropped();
         //this.transform.parent = null;
         this.GetComponent<Rigidbody2D>().AddForce(m_playerHand.GetComponent<PlayerActions>().GetPlayerController().transform.up * 10, ForceMode2D.Impulse);
+        m_collisionDamage.SetAttacking(true);
 
-		if(m_audioComponent != null)
+		if(m_audioSource != null)
 		{
-			m_audioComponent.PlayAudio(m_punchWoosh);
+            m_audioSource.clip = m_punchWoosh;
+            m_audioSource.Play();
 		}
 
         switch (m_handSide.ToLower())
@@ -264,5 +265,11 @@ public class Throwable : MonoBehaviour
         StartCoroutine(DisableCollision());
         yield return new WaitForSeconds(30);
         Destroy(this.gameObject);
+    }
+
+    public void PlayHitAudio()
+    {
+        m_audioSource.clip = m_hitAudio;
+        m_audioSource.Play();
     }
 }

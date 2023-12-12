@@ -7,10 +7,13 @@ public class Projectile : MonoBehaviour
     private Rigidbody2D m_RB;
     private Coroutine C_LifeSpan;
     private bool m_alive = false;
+    private CollisionDamage m_damageComponent;
 
     private void Awake()
     {
         m_RB = GetComponent<Rigidbody2D>();
+        m_damageComponent = GetComponent<CollisionDamage>();
+        m_damageComponent.SetAttacking(true);
     }
     public void FireProjectile(Transform fireTransform, float fireSpeed)
     {
