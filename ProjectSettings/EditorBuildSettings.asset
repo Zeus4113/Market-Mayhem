@@ -17,4 +17,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sebastian/Scenes/LoadingScreen.unity
     guid: f0efdffb2c938ed49badf07da9667a5c
+  - enabled: 1
+    path: Assets/Sebastian/Scenes/SebLevel.unity
+    guid: 7350e881e644a9144aa8ab9f1096e59d
+  - enabled: 1
+    path: Assets/Kai/Scenes/EuropeanScene.unity
+    guid: a852f3eede75f3848b65bbb6802f72a9
+  - enabled: 1
+    path: Assets/Kai/Scenes/WoodenScene.unity
+    guid: 083715d8f61fb25488efc91fa546a8f0
   m_configObjects: {}
