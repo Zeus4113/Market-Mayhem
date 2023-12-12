@@ -163,8 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 132abb7ff00465646b20e352508b416a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 10
-  m_forceMultiplier: 25
+  m_damage: 30
+  m_forceMultiplier: 15
   m_hitParticlesObject: {fileID: 2042980795568123917, guid: e7ccfc61d23be3345a2799f5a2025def, type: 3}
   m_hitAudioClip: {fileID: 8300000, guid: f05e9cf1cbe06c040a77b9ce7b3108e7, type: 3}
 --- !u!114 &6085304768947682089

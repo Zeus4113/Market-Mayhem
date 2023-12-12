@@ -19,5 +19,5 @@ MonoBehaviour:
   m_breakablePrefab: {fileID: 2279140934922899179, guid: 96e17d332bec5b14595edd64c8086476, type: 3}
   m_itemPrefab: {fileID: 6716341007058586434, guid: 70175b32c21d2f54eb709ac525943033, type: 3}
   m_enemyPrefab: {fileID: 7559081894675011683, guid: 58236e7a057dc154490309166071606b, type: 3}
-  m_enemyCount: 12
-  m_enemySpawnDelay: 0.6
+  m_enemyCount: 20
+  m_enemySpawnDelay: 0.5
