@@ -37,12 +37,12 @@ public class PlayerMovement : MonoBehaviour
 		BindEvents(true);
 	}
 
-	private void OnDestroy()
-	{
-		if (m_playerInputComponent == null) return;
+	//private void OnDestroy()
+	//{
+	//	if (m_playerInputComponent == null) return;
 
-		BindEvents(false);
-	}
+	//	BindEvents(false);
+	//}
 
 	public void BindEvents(bool isTrue)
 	{

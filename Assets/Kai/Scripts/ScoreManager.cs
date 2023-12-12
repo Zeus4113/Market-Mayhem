@@ -75,9 +75,15 @@ public class ScoreManager : MonoBehaviour
 		m_progressBar.value = CalculateBarPercentage();
 	}
 
+	public void RemoveItemFromList(Item item)
+	{
+		m_itemList.Remove(item);
+	}
+
 	public Item GetRandomItem()
 	{
-		return m_itemList[Random.Range(0, m_itemList.Count-1)];
+		if(m_itemList.Count == 0) return null;
+		return m_itemList[Random.Range(0, m_itemList.Count)];
 	}
 
 	public List<Item> GetItemList() { return m_itemList; }

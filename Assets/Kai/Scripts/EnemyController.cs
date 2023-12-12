@@ -51,6 +51,8 @@ public class EnemyController : MonoBehaviour
 		{
 			Item newItem = m_manager.GetGameManager().GetScoreManager().GetRandomItem();
 
+			if (newItem == null) return null;
+
 			if (!newItem.IsPickedUp())
 			{
 				return newItem;
@@ -58,7 +60,7 @@ public class EnemyController : MonoBehaviour
 			else if(newItem.IsPickedUp())
 			{
 				validItems--;
-				Debug.Log(validItems);
+				Debug.Log(m_manager.GetGameManager().GetScoreManager().GetItemList().Count);
 				if (validItems == 0) break;
 			}
 
@@ -184,6 +186,7 @@ public class EnemyController : MonoBehaviour
 
 	public void RemoveItem()
 	{
+		m_manager.GetGameManager().GetScoreManager().RemoveItemFromList(m_pickedItem);
 		Destroy(m_pickedItem);
 		SetEnemyState(EnemyStates.Searching);
 	}
