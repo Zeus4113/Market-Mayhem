@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 700985415593981783}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Position (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4989140395482639173}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Position (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 275275974432858693}
   - component: {fileID: 9159002802428210125}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Sprite 1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +158,7 @@ GameObject:
   - component: {fileID: 7300920101636793073}
   - component: {fileID: 2392620563770334900}
   - component: {fileID: 3652404177435119847}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 4480326233369736698}
   - component: {fileID: 4120136083072155474}
   - component: {fileID: 5061383799860988582}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Breakable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +385,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1320383785948488854}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Sprites
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,7 +419,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7334098013315257496}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Position (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +450,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8868011600700963009}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Position (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -481,7 +481,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1956472462346230626}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Item Positions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -520,7 +520,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8235268060514098401}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Position (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -551,7 +551,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7487636204326463442}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Position (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -583,7 +583,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6065367366966207913}
   - component: {fileID: 9211749941655991497}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Sprite 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -666,7 +666,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4169304513368834069}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Position (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -697,7 +697,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5212427062962528668}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Position (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

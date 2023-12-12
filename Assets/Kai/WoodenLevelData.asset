@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WoodenLevelData
   m_EditorClassIdentifier: 
   m_playerPrefab: {fileID: 8212253129264742215, guid: 7a373f0487b049b4ba98df5ad8917ca5, type: 3}
-  m_cameraPrefab: {fileID: 4767596883235728661, guid: 825e6d1a8fb2fe1419aeae8242b0e3d5, type: 3}
+  m_cameraPrefab: {fileID: 4767596883235728661, guid: 62da846afddcf6a4991365585ca1e58a, type: 3}
   m_playerInputPrefab: {fileID: 3518103070271731478, guid: 448f351fc25788e41ba881667e26da23, type: 3}
   m_playerCameraOffset: -7.5
   m_breakablePrefab: {fileID: 2279140934922899179, guid: 96e17d332bec5b14595edd64c8086476, type: 3}
