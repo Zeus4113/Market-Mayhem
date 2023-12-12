@@ -78,6 +78,10 @@ public class UserInterfaceManager : MonoBehaviour
 	private void GameLoss()
 	{
 		EnableWidget("game over overlay", true);
+		m_progressBar.SetActive(false);
+		m_calendar.SetActive(false);
+		m_digitalClock.SetActive(false);
+		m_peopleCounter.SetActive(false);
 
 		gameLoss?.Invoke();
 	}
@@ -85,6 +89,10 @@ public class UserInterfaceManager : MonoBehaviour
 	private void GameWon()
 	{
 		EnableWidget("win screen overlay", true);
+		m_progressBar.SetActive(false);
+		m_calendar.SetActive(false);
+		m_digitalClock.SetActive(false);
+		m_peopleCounter.SetActive(false);
 
 		gameWon?.Invoke();
 	}

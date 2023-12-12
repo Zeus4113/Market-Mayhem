@@ -44,6 +44,9 @@ public class ScoreManager : MonoBehaviour
 		m_breakableTransforms = positions;
 		m_userInterfaceManager = m_gameManager.GetUIManager();
 
+		m_userInterfaceManager.gameLoss += ClearItems;
+		m_userInterfaceManager.gameWon += ClearItems;
+
 		if (m_userInterfaceManager == null) return;
 
 		Transform myWidget = m_userInterfaceManager.GetWidget("Progress Bar").transform;
