@@ -40,7 +40,7 @@ public class HealthComponent : MonoBehaviour, IDamageable
 				switch (damageType)
 				{
 
-					case "basic":
+					default:
 						i = Random.Range(0, 2);
 						switch (i)
 						{
