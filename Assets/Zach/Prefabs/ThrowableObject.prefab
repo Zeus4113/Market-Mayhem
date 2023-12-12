@@ -223,6 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponData: {fileID: 0}
   m_punchWoosh: {fileID: 8300000, guid: 72698e9ec88a90449b96715f74aa7f32, type: 3}
+  m_despawnParticles: {fileID: 3453013003576189249, guid: ee9c633bafc1ae44984730898a98061e, type: 3}
 --- !u!114 &4019766379050033215
 MonoBehaviour:
   m_ObjectHideFlags: 0

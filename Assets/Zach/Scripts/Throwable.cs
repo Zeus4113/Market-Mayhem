@@ -8,6 +8,7 @@ public class Throwable : MonoBehaviour
 {
     [SerializeField] private WeaponScriptableObject weaponData;
     [SerializeField] private AudioClip m_punchWoosh;
+    [SerializeField] private GameObject m_despawnParticles;
 
 
     private Rigidbody2D m_playerHand;
@@ -268,7 +269,8 @@ public class Throwable : MonoBehaviour
     private IEnumerator LifeSpan()
     {
         StartCoroutine(DisableCollision());
-        yield return new WaitForSeconds(30);
+        yield return new WaitForSeconds(3);
+        Instantiate(m_despawnParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();
         Destroy(this.gameObject);
     }
 

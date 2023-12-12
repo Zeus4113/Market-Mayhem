@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CollisionDamage : MonoBehaviour
@@ -14,6 +15,7 @@ public class CollisionDamage : MonoBehaviour
 	private bool m_attacking = false;
 	private AudioSource m_audioSource;
 	private string m_damageType;
+	private List<GameObject> m_collisionObjects = new();
 
 	private void Awake()
 	{
@@ -30,12 +32,16 @@ public class CollisionDamage : MonoBehaviour
 
         if (!m_attacking) return;
 
+		if (m_collisionObjects == null) return;
+
+        if (m_collisionObjects.Contains(collision.gameObject)) return;
+
 		Rigidbody2D rigidbody2D = collision.GetComponent<Rigidbody2D>();
 		IDamageable damageable = collision.GetComponent<IDamageable>();
 		EnemyController controller = collision.GetComponent<EnemyController>();
 
-		Debug.Log(this.gameObject.name + " Damage: " + m_damage
-			);
+		Debug.Log(this.gameObject.name + " Damage: " + m_damage);
+		
 		damageable.Damage(m_damage, m_damageType);
 
 		Vector2 force = new Vector2(m_rigidbody.velocity.x * m_forceMultiplier, m_rigidbody.velocity.y * m_forceMultiplier);
@@ -65,6 +71,7 @@ public class CollisionDamage : MonoBehaviour
 			rigidbody2D.AddForce(force, ForceMode2D.Impulse);
 		}
 
+		m_collisionObjects.Add(collision.gameObject);
 	}
 
 	public void SetDamageStats(float damage, float knockback, string damageType)
@@ -92,5 +99,11 @@ public class CollisionDamage : MonoBehaviour
 	public void SetAttacking(bool attacking)
 	{
 		m_attacking = attacking;
+		switch (attacking)
+		{
+			case true:
+				if(m_collisionObjects != null) m_collisionObjects.Clear();
+				break;
+		}
 	}
 }
