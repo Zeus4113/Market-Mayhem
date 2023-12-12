@@ -24,8 +24,8 @@ MonoBehaviour:
   m_handleOffset: 0.25
   m_handleVertOffset: 0.05
   m_rotationOffset: 315
-  m_damage: 50
-  m_knockback: 25
+  m_damage: 100
+  m_knockback: 15
   m_explodeOnThrow: 0
   m_damageType: blunt
   m_ranged: 0

@@ -284,6 +284,7 @@ MonoBehaviour:
   m_deadEnemyNoHead: {fileID: 5037155403769787392, guid: ba3715e49d1675f4dbc3ba83db76a89b, type: 3}
   m_deadEnemyNoHeadTwo: {fileID: 5037155403769787392, guid: 5c7317bc5fcdf0040858970faf248f5c, type: 3}
   m_maxHealth: 100
+  m_headExplosionParticles: {fileID: 1602448157263054713, guid: 62247bfb24166c7438c5ce2aa73781b3, type: 3}
 --- !u!58 &-6500587951054160866
 CircleCollider2D:
   m_ObjectHideFlags: 0

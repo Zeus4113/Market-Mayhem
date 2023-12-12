@@ -9,6 +9,7 @@ public class HealthComponent : MonoBehaviour, IDamageable
     [SerializeField] private GameObject m_deadEnemyNoHead;
     [SerializeField] private GameObject m_deadEnemyNoHeadTwo;
     [SerializeField] private float m_maxHealth;
+	[SerializeField] private GameObject m_headExplosionParticles;
 	private float m_currentHealth;
 	private int i;
 
@@ -66,9 +67,11 @@ public class HealthComponent : MonoBehaviour, IDamageable
                                 break;
                             case 2:
                                 m_spawnedDeadEnemy = m_deadEnemyNoHead;
+                                Instantiate(m_headExplosionParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();
                                 break;
                             case 3:
                                 m_spawnedDeadEnemy = m_deadEnemyNoHeadTwo;
+                                Instantiate(m_headExplosionParticles, transform.position, transform.rotation).GetComponent<ParticleSystem>().Play();
                                 break;
                         }
                         break;
